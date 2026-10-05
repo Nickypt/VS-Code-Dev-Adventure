@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -43,21 +44,21 @@
             --warning-color: #e0af68;
         }
 
-        [data-theme="dracula"] {
-            --bg-base: #282a36;
-            --bg-sidebar: #21222c;
-            --bg-activity: #44475a;
-            --bg-editor: #282a36;
-            --bg-terminal: #1e1f29;
-            --border-color: #44475a;
-            --text-main: #f8f8f2;
-            --text-muted: #6272a4;
-            --accent-color: #50fa7b;
-            --accent-glow: rgba(80, 250, 123, 0.3);
-            --accent-blue: #8be9fd;
-            --accent-purple: #bd93f9;
-            --danger-color: #ff5555;
-            --warning-color: #f1fa8c;
+        [data-theme="matrix"] {
+            --bg-base: #0a0e0a;
+            --bg-sidebar: #0f140f;
+            --bg-activity: #141f14;
+            --bg-editor: #0a0e0a;
+            --bg-terminal: #050705;
+            --border-color: #1e331e;
+            --text-main: #00ff66;
+            --text-muted: #008833;
+            --accent-color: #00ff66;
+            --accent-glow: rgba(0, 255, 102, 0.4);
+            --accent-blue: #00ffaa;
+            --accent-purple: #00cc44;
+            --danger-color: #ff3333;
+            --warning-color: #ffff00;
         }
 
         * {
@@ -193,7 +194,7 @@
 
         /* BARRA LATERAL (SIDEBAR) */
         .sidebar {
-            width: 290px;
+            width: 310px;
             background-color: var(--bg-sidebar);
             border-right: 1px solid var(--border-color);
             display: flex;
@@ -279,6 +280,9 @@
             opacity: 0.9;
             box-shadow: 0 0 10px var(--accent-glow);
             transform: translateY(-1px);
+        }
+        .action-button.danger {
+            background: linear-gradient(135deg, var(--danger-color), var(--warning-color));
         }
 
         .upgrade-item, .tech-item {
@@ -423,9 +427,9 @@
             outline: none;
         }
 
-        /* TERMINAL INFERIOR */
+        /* TERMINAL CLI INTERATIVO (HACKNET STYLE) */
         .terminal-panel {
-            height: 180px;
+            height: 200px;
             background-color: var(--bg-terminal);
             border-top: 1px solid var(--border-color);
             display: flex;
@@ -443,19 +447,6 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .terminal-tabs {
-            display: flex;
-            gap: 15px;
-        }
-        .terminal-tab {
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-        .terminal-tab.active {
-            color: var(--text-main);
-            border-bottom: 1px solid var(--accent-color);
-        }
-
         .terminal-body {
             flex: 1;
             padding: 10px 15px;
@@ -463,11 +454,63 @@
             overflow-y: auto;
             color: var(--accent-blue);
             line-height: 1.4;
+            display: flex;
+            flex-direction: column;
         }
-        .log-success { color: var(--accent-color); }
-        .log-error { color: var(--danger-color); }
-        .log-warn { color: var(--warning-color); }
-        .log-info { color: var(--accent-blue); }
+
+        .cli-output {
+            flex: 1;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-bottom: 5px;
+        }
+
+        .cli-input-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 5px;
+        }
+
+        .cli-prompt {
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .cli-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            outline: none;
+        }
+
+        /* BOSS FIGHT CONSOLE PANEL */
+        .boss-arena {
+            background: rgba(255, 85, 85, 0.05);
+            border: 1px solid var(--danger-color);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        .boss-hp-bar {
+            width: 100%;
+            height: 14px;
+            background: var(--bg-base);
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .boss-hp-fill {
+            height: 100%;
+            background: var(--danger-color);
+            width: 100%;
+            transition: width 0.3s;
+        }
 
         /* BARRA DE STATUS */
         .statusbar {
@@ -544,57 +587,20 @@
             justify-content: flex-end;
             gap: 10px;
         }
-
-        /* MINI-GAME TRACEROUTE */
-        .traceroute-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .node-btn {
-            background-color: var(--bg-base);
-            border: 1px solid var(--border-color);
-            padding: 15px;
-            border-radius: 6px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-            color: var(--text-main);
-        }
-        .node-btn:hover {
-            border-color: var(--accent-blue);
-            background-color: var(--border-color);
-        }
-        .node-btn.connected {
-            border-color: var(--accent-color);
-            background-color: var(--accent-glow);
-            color: var(--accent-color);
-        }
-        .node-btn.blocked {
-            border-color: var(--danger-color);
-            background-color: rgba(255, 85, 85, 0.1);
-            color: var(--danger-color);
-            cursor: not-allowed;
-        }
     </style>
 </head>
 <body data-theme="cyberpunk">
 
-    <!-- MODAL DE BRIEFING / HISTÓRIA COMPLEXA -->
+    <!-- MODAL DE BRIEFING -->
     <div class="modal-overlay" id="briefing-modal">
         <div class="modal-box">
             <div class="modal-title">
                 <i class="fa-solid fa-brain"></i> OPERAÇÃO ORACLE: A CONSPIRAÇÃO OMNICORP
             </div>
             <div class="modal-body">
-                <p>Ano 2088. A megacorporação <strong>OmniCorp</strong> não apenas monopolizou a economia global, como desenvolveu em segredo a <strong>IA Oracle</strong> — uma inteligência artificial quântica projetada para absorver e digitalizar a consciência humana através da rede.</p>
-                <p>Você é um Netrunner de elite recrutado pela célula rebelde clandestina <em>The Resistance</em>. O seu objetivo é invadir os nós centrais da megacorporação resolvendo desafios de código avançados.</p>
-                <p><strong>Suas Decisões Moldarão o Destino do Mundo:</strong></p>
-                <ul>
-                    <li><strong>Recompensas Massivas:</strong> Cada desafio de código concluído garante pacotes massivos de LOC e XP, acelerando sua progressão.</li>
-                    <li><strong>Múltiplos Finais:</strong> Dependendo do seu nível de hacker, créditos acumulados e tecnologias dominadas, você alcançará desfechos totalmente diferentes (Libertação Digital, Absorção pela IA ou o Colapso Global).</li>
-                </ul>
+                <p>Ano 2088. A megacorporação <strong>OmniCorp</strong> desenvolveu a <strong>IA Oracle</strong> — uma inteligência artificial quântica que absorve a consciência humana através da rede global.</p>
+                <p>Você é um Netrunner de elite da resistência clandestina. Para derrubar o sistema, você precisará resolver desafios de código com **recompensas massivas**, invadir servidores usando o **Terminal CLI interativo** e derrotar os implacáveis **Core Firewalls Bosses** da OmniCorp!</p>
+                <p><strong>Comandos do CLI:</strong> Digite <code>help</code> no terminal inferior a qualquer momento para ver os comandos disponíveis (<code>ls</code>, <code>cat</code>, <code>connect</code>, <code>hack</code>, etc.).</p>
             </div>
             <div class="modal-footer">
                 <button class="action-button" onclick="closeBriefing()" style="width: auto; padding: 8px 20px;">INICIAR INFILTRAÇÃO <i class="fa-solid fa-arrow-right"></i></button>
@@ -606,13 +612,19 @@
     <div class="modal-overlay" id="help-modal" style="display: none;">
         <div class="modal-box">
             <div class="modal-title">
-                <i class="fa-solid fa-circle-question"></i> Guia do Netrunner (Ajuda)
+                <i class="fa-solid fa-circle-question"></i> Guia do Netrunner & CLI
             </div>
             <div class="modal-body">
-                <p><strong>Editor de Desafios (Centro):</strong> Resolva os problemas de programação escrevendo o código correto. Agora com recompensas massivas por acerto!</p>
-                <p><strong>Extensões (🧩):</strong> Compradas com créditos corporativos para gerar código passivo por segundo.</p>
-                <p><strong>Tech Tree (🌳):</strong> Desbloqueie conceitos reais de computação que abrem caminho para os finais lendários do jogo.</p>
-                <p><strong>Traceroute (🌐):</strong> Invasão tática de servidores da OmniCorp para coletar bônus de créditos e avançar para o final da campanha.</p>
+                <p><strong>Terminal CLI Interativo:</strong> No rodapé, digite comandos reais do estilo Hacknet/Linux:</p>
+                <ul>
+                    <li><code>help</code> - Lista comandos do sistema</li>
+                    <li><code>ls</code> - Lista arquivos e servidores visíveis</li>
+                    <li><code>cat [arquivo]</code> - Lê segredos e lore da OmniCorp</li>
+                    <li><code>connect [servidor]</code> - Conecta a nós externos</li>
+                    <li><code>hack</code> - Inicia varredura ou exploração</li>
+                    <li><code>clear</code> - Limpa o terminal</li>
+                </ul>
+                <p><strong>Batalhas de Chefe (Firewalls):</strong> Enfrente os diretores de segurança corporativa digitando comandos de defesa (<code>iptables -A</code>, <code>patch.fix()</code>, <code>ssl.renew()</code>) antes que o DDoS esgote sua barra de integridade.</p>
             </div>
             <div class="modal-footer">
                 <button class="action-button" onclick="toggleModal('help-modal', false)" style="width: auto; padding: 8px 20px;">FECHAR GUIA</button>
@@ -620,15 +632,13 @@
         </div>
     </div>
 
-    <!-- MODAL DE FINAL ALTERNATIVO (CINEMATOGRÁFICO) -->
+    <!-- MODAL DE FINAL ALTERNATIVO -->
     <div class="modal-overlay" id="ending-modal" style="display: none;">
         <div class="modal-box" style="border-color: var(--accent-blue);">
             <div class="modal-title" id="ending-title">
                 <i class="fa-solid fa-flag-checkered"></i> RELATÓRIO FINAL DE MISSÃO
             </div>
-            <div class="modal-body" id="ending-text">
-                <!-- Preenchido via JS -->
-            </div>
+            <div class="modal-body" id="ending-text"></div>
             <div class="modal-footer">
                 <button class="action-button" onclick="location.reload()" style="width: auto; padding: 8px 20px;">REINICIAR A REDE (NOVO JOGO)</button>
             </div>
@@ -650,7 +660,7 @@
         </div>
         <div class="titlebar-right">
             <button class="top-btn" onclick="toggleTheme()"><i class="fa-solid fa-palette"></i> Tema</button>
-            <button class="top-btn" onclick="toggleModal('help-modal', true)"><i class="fa-solid fa-question"></i> Ajuda</button>
+            <button class="top-btn" onclick="toggleModal('help-modal', true)"><i class="fa-solid fa-question"></i> Guia CLI</button>
         </div>
     </div>
 
@@ -663,7 +673,7 @@
                 <div class="activity-icon active" onclick="switchSidebar('explorer')" title="Explorador / Status"><i class="fa-regular fa-folder-open"></i></div>
                 <div class="activity-icon" onclick="switchSidebar('extensions')" title="Extensões & Automação"><i class="fa-solid fa-puzzle-piece"></i></div>
                 <div class="activity-icon" onclick="switchSidebar('techtree')" title="Tech Tree & Educação"><i class="fa-solid fa-graduation-cap"></i></div>
-                <div class="activity-icon" onclick="switchSidebar('traceroute')" title="Invasão de Servidor (Traceroute)"><i class="fa-solid fa-network-wired"></i></div>
+                <div class="activity-icon" onclick="switchSidebar('boss')" title="Batalhas de Chefe (Firewalls)"><i class="fa-solid fa-shield-halved"></i></div>
             </div>
             <div class="activity-icons">
                 <div class="activity-icon" onclick="triggerManualEndingCheck()" title="Avaliar Finais da História"><i class="fa-solid fa-award"></i></div>
@@ -717,13 +727,14 @@
                     </div>
                 </div>
 
-                <!-- PAINEL TRACEROUTE -->
-                <div id="panel-traceroute" class="panel-view">
+                <!-- PAINEL DE BATALHA DE CHEFE -->
+                <div id="panel-boss" class="panel-view">
                     <div class="sidebar-section">
-                        <h4><i class="fa-solid fa-shield-halved"></i> Hackear OmniCorp</h4>
-                        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Conecte os nós de rede na ordem correta antes do firewall disparar.</p>
-                        <button class="action-button" onclick="startTracerouteGame()"><i class="fa-solid fa-play"></i> Iniciar Traceroute</button>
-                        <div id="traceroute-area" style="margin-top: 10px;"></div>
+                        <h4><i class="fa-solid fa-skull"></i> Batalha de Firewall Core</h4>
+                        <div id="boss-arena-container">
+                            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Enfrente o Diretor AI-Vanguard e destrua seu núcleo de segurança!</p>
+                            <button class="action-button danger" onclick="startBossFight()"><i class="fa-solid fa-sword"></i> Iniciar Boss Fight</button>
+                        </div>
                     </div>
                 </div>
 
@@ -767,19 +778,23 @@ function bypassOracleNeuralNet() {
 
     </div>
 
-    <!-- TERMINAL INFERIOR -->
+    <!-- TERMINAL CLI INTERATIVO (ESTILO HACKNET) -->
     <div class="terminal-panel">
         <div class="terminal-header">
-            <div class="terminal-tabs">
-                <span class="terminal-tab active">PROBLEMAS & LOGS DO ORACLE</span>
-                <span class="terminal-tab">SAÍDA</span>
-                <span class="terminal-tab">TERMINAL CYBERPUNK</span>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <span style="color: var(--accent-color); font-weight:700;"><i class="fa-solid fa-terminal"></i> OMNI-CLI v3.8 (Interactive)</span>
             </div>
-            <span>zsh - omni@netrunner</span>
+            <span>zsh - netrunner@omni-subnet</span>
         </div>
-        <div class="terminal-body" id="terminal-logs">
-            [SYS_INIT] Conexão segura estabelecida com o cluster central.<br>
-            [NARRATIVE] A IA Oracle está monitorando seus keystrokes. Resolva os desafios para corromper o sistema principal!
+        <div class="terminal-body">
+            <div class="cli-output" id="cli-output">
+[SYS_INIT] Omni-CLI carregado com sucesso.
+Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os segredos da OmniCorp.
+            </div>
+            <div class="cli-input-line">
+                <span class="cli-prompt">netrunner@omni:~$</span>
+                <input type="text" class="cli-input" id="cli-command-input" placeholder="Digite um comando (ex: help, ls, hack)..." onkeydown="handleCliInput(event)">
+            </div>
         </div>
     </div>
 
@@ -805,10 +820,11 @@ function bypassOracleNeuralNet() {
             cps: 0,
             xp: 0,
             level: 1,
-            credits: 50,
+            credits: 100,
             titleIndex: 0,
             currentChallengeIndex: 0,
             challengesCompleted: 0,
+            bossFightsWon: 0,
             upgrades: {
                 prettier: { name: "Prettier Neural-Format", cost: 50, cps: 5, count: 0, desc: "Formata e programa linhas automaticamente." },
                 eslint: { name: "ESLint Cyber-Guard", cost: 300, cps: 25, count: 0, desc: "Remove bugs lógicos e gera código quântico." },
@@ -834,19 +850,19 @@ function bypassOracleNeuralNet() {
                     let clean = input.replace(/\s+/g, '').toLowerCase();
                     return clean.includes("lettoken='omni_key_99'") || clean.includes('lettoken="omni_key_99"');
                 },
-                errorFeedback: "Erro de atribuição. Lembre-se da estrutura: `let nome = 'valor';` com ponto e vírgula no final."
+                errorFeedback: "Erro de atribuição. Lembre-se da estrutura: `let nome = 'valor';`."
             },
             {
                 id: 2,
                 title: "Matriz de Roteamento de IPs",
-                desc: "Crie um Array (lista) chamado <code>nodes</code> contendo dois endereços IP: <code>'192.168.1.10'</code> e <code>'10.0.0.5'</code>.",
+                desc: "Crie um Array chamado <code>nodes</code> contendo dois endereços IP: <code>'192.168.1.10'</code> e <code>'10.0.0.5'</code>.",
                 reward: 500,
                 hint: "Sintaxe correta: let nodes = ['192.168.1.10', '10.0.0.5'];",
                 validator: (input) => {
                     let clean = input.replace(/\s+/g, '');
                     return clean.includes("nodes=['192.168.1.10','10.0.0.5']") || clean.includes('nodes=["192.168.1.10","10.0.0.5"]');
                 },
-                errorFeedback: "Erro na lista. Arrays usam colchetes `[...]` e strings internas precisam de aspas e vírgulas."
+                errorFeedback: "Erro na lista. Arrays usam colchetes `[...]` e strings com aspas."
             },
             {
                 id: 3,
@@ -870,17 +886,24 @@ function bypassOracleNeuralNet() {
                     let clean = input.replace(/\s+/g, '').toLowerCase();
                     return clean.includes("for(leti=0;i<5;i++)");
                 },
-                errorFeedback: "Erro no loop for. Certifique-se de separar os 3 argumentos com ponto e vírgula dentro dos parênteses."
+                errorFeedback: "Erro no loop for."
             }
         ];
 
         const titles = ["[Junior Hacker]", "[Script Kiddie]", "[Fullstack Mercenary]", "[Cyber Security Specialist]", "[Master Netrunner]", "[OmniCorp Destroyer]"];
 
+        // ARQUIVOS DO SISTEMA CLI
+        const virtualFileSystem = {
+            "lore.txt": "ARQUIVO CONFIDENCIAL OMNICORP:\nProjeto Oracle nasceu em 2075 para absorver cérebros humanos em servidores quânticos. A resistência liderada por 'The Resistance' é a única barreira contra a extinção digital.",
+            "servers.txt": "NÓS CONHECIDOS DA OMNICORP:\n- 192.168.1.100 (Gateway Principal)\n- 10.0.44.12 (Banco de Dados Central Oracle)\n- 172.16.8.99 (Firewall de Defesa AI-Vanguard)",
+            "readme.md": "Bem-vindo ao Omni-CLI. Use 'help' para ver os comandos de exploração, 'cat [arquivo]' para ler segredos e 'connect [ip]' para invadir servidores."
+        };
+
         // FUNÇÕES DE INTERFACE E MODAIS
         function closeBriefing() {
             document.getElementById('briefing-modal').style.display = 'none';
             loadCurrentChallenge();
-            addLog("Infiltração iniciada. Sistema Oracle vulnerável a injeções de código.", "success");
+            appendCliOutput("Infiltração iniciada. IA Oracle monitorando atividade na rede.");
         }
 
         function toggleModal(modalId, show) {
@@ -894,30 +917,89 @@ function bypassOracleNeuralNet() {
             event.currentTarget.classList.add('active');
             document.getElementById('panel-' + viewId).classList.add('active');
 
-            const titlesMap = { explorer: "Explorador", extensions: "Extensões", techtree: "Tech Tree", traceroute: "Traceroute" };
+            const titlesMap = { explorer: "Explorador", extensions: "Extensões", techtree: "Tech Tree", boss: "Batalha de Chefe" };
             document.getElementById('sidebar-title').innerText = titlesMap[viewId];
         }
 
         let currentThemeIndex = 0;
-        const themes = ["cyberpunk", "tokyo-night", "dracula"];
+        const themes = ["cyberpunk", "tokyo-night", "matrix"];
         function toggleTheme() {
             currentThemeIndex = (currentThemeIndex + 1) % themes.length;
             document.body.setAttribute("data-theme", themes[currentThemeIndex]);
-            addLog(`Tema alterado para: ${themes[currentThemeIndex]}`, "info");
+            appendCliOutput(`Tema alterado para: ${themes[currentThemeIndex]}`);
         }
 
-        function addLog(msg, type = "info") {
-            const term = document.getElementById('terminal-logs');
-            let cssClass = "";
-            if (type === "success") cssClass = "log-success";
-            if (type === "error") cssClass = "log-error";
-            if (type === "warn") cssClass = "log-warn";
-            
-            term.innerHTML += `<br><span class="${cssClass}">[${new Date().toLocaleTimeString()}] ${msg}</span>`;
-            term.scrollTop = term.scrollHeight;
+        function appendCliOutput(text) {
+            const out = document.getElementById('cli-output');
+            out.innerHTML += `\n> ${text}`;
+            out.scrollTop = out.scrollHeight;
         }
 
-        // GERENCIAMENTO DE DESAFIOS E RECOMPENSAS MASSIVAS
+        // TERMINAL CLI INTERATIVO (HACKNET STYLE)
+        function handleCliInput(e) {
+            if (e.key === 'Enter') {
+                let inputField = document.getElementById('cli-command-input');
+                let cmd = inputField.value.trim();
+                if (!cmd) return;
+
+                appendCliOutput(`netrunner@omni:~$ ${cmd}`);
+                processCliCommand(cmd);
+                inputField.value = "";
+            }
+        }
+
+        function processCliCommand(rawCmd) {
+            let parts = rawCmd.split(' ');
+            let cmd = parts[0].toLowerCase();
+            let arg = parts[1] || "";
+
+            switch (cmd) {
+                case 'help':
+                    appendCliOutput("Comandos disponíveis:\n  help - Exibe esta ajuda\n  ls - Lista arquivos do diretório atual\n  cat [arquivo] - Lê o conteúdo de um arquivo\n  connect [ip] - Conecta a um servidor remoto da OmniCorp\n  hack - Inicia varredura e coleta créditos\n  clear - Limpa o terminal");
+                    break;
+                case 'ls':
+                    appendCliOutput("Arquivos disponíveis:\n" + Object.keys(virtualFileSystem).join("  "));
+                    break;
+                case 'cat':
+                    if (!arg) {
+                        appendCliOutput("Erro: Especifique o arquivo. Ex: cat lore.txt");
+                    } else if (virtualFileSystem[arg]) {
+                        appendCliOutput(virtualFileSystem[arg]);
+                    } else {
+                        appendCliOutput(`Erro: Arquivo '${arg}' não encontrado.`);
+                    }
+                    break;
+                case 'connect':
+                    if (!arg) {
+                        appendCliOutput("Erro: Especifique o IP. Ex: connect 192.168.1.100");
+                    } else {
+                        appendCliOutput(`Conectando ao alvo ${arg}... Handshake quântico estabelecido.`);
+                        game.credits += 25;
+                        game.xp += 10;
+                        checkLevelUp();
+                        updateUI();
+                        appendCliOutput("Servidor invadido com sucesso! +25 Créditos coletados.");
+                    }
+                    break;
+                case 'hack':
+                    let reward = 150;
+                    game.loc += reward;
+                    game.xp += 15;
+                    checkLevelUp();
+                    updateUI();
+                    appendCliOutput(`[EXPLOIT] Varredura executada com sucesso! +${reward} LOC obtidos.`);
+                    break;
+                case 'clear':
+                    document.getElementById('cli-output.innerText = ""');
+                    document.getElementById('cli-output').innerHTML = "[SYS_INIT] Terminal limpo.";
+                    break;
+                default:
+                    appendCliOutput(`Comando desconhecido: '${cmd}'. Digite 'help' para ajuda.`);
+                    break;
+            }
+        }
+
+        // DESAFIOS E RECOMPENSAS MASSIVAS
         function loadCurrentChallenge() {
             let ch = challenges[game.currentChallengeIndex % challenges.length];
             document.getElementById('challenge-num').innerText = ch.id + (Math.floor(game.currentChallengeIndex / challenges.length) * 4);
@@ -931,7 +1013,7 @@ function bypassOracleNeuralNet() {
             let ch = challenges[game.currentChallengeIndex % challenges.length];
 
             if (!inputVal.trim()) {
-                addLog("Campo de código vazio. Insira seu payload antes de injetar.", "warn");
+                appendCliOutput("Campo de código vazio. Insira seu payload antes de injetar.");
                 return;
             }
 
@@ -941,16 +1023,14 @@ function bypassOracleNeuralNet() {
                 game.loc += ch.reward;
                 game.xp += 40;
                 game.challengesCompleted++;
-                addLog(`[SUCESSO] Payload injetado com êxito! +${ch.reward} LOC e +40 XP.`, "success");
+                appendCliOutput(`[SUCESSO] Payload injetado com êxito! +${ch.reward} LOC e +40 XP.`);
                 checkLevelUp();
                 
                 game.currentChallengeIndex++;
                 loadCurrentChallenge();
                 updateUI();
             } else {
-                addLog(`[ALERTA ORACLE] Falha na injeção do payload.`, "error");
-                addLog(`Dica: ${ch.hint}`, "warn");
-                addLog(`Feedback: ${ch.errorFeedback}`, "error");
+                appendCliOutput(`[ALERTA] Falha na injeção. Dica: ${ch.hint}`);
             }
         }
 
@@ -971,43 +1051,130 @@ function bypassOracleNeuralNet() {
                 if (game.level % 2 === 0 && game.titleIndex < titles.length - 1) {
                     game.titleIndex++;
                     document.getElementById('player-title-display').innerText = titles[game.titleIndex];
-                    addLog(`PARABÉNS! Cargo atualizado para: ${titles[game.titleIndex]}`, "success");
+                    appendCliOutput(`PARABÉNS! Cargo atualizado para: ${titles[game.titleIndex]}`);
                 }
-                addLog(`Subiu para o Nível ${game.level}! +75 Créditos Corporativos.`, "success");
+                appendCliOutput(`Subiu para o Nível ${game.level}! +75 Créditos.`);
             }
         }
 
-        // SISTEMA DE FINAIS ALTERNATIVOS
+        // BATALHA DE CHEFE (AI-VANGUARD BOSS FIGHT)
+        let bossActive = false;
+        let bossHP = 100;
+        let bossMaxHP = 100;
+        let bossTimer = 30;
+        let bossTimerInterval = null;
+        let currentDefenseCommand = "";
+        const defenseCommands = [
+            { cmd: "iptables -A", desc: "Bloqueia tráfego DDoS do Firewall" },
+            { cmd: "patch.fix()", desc: "Corrige vulnerabilidade no núcleo" },
+            { cmd: "ssl.renew()", desc: "Renova certificado de criptografia" }
+        ];
+
+        function startBossFight() {
+            if (bossActive) return;
+            bossActive = true;
+            bossHP = 100;
+            bossTimer = 30;
+
+            let container = document.getElementById('boss-arena-container');
+            container.innerHTML = `
+                <div class="boss-arena">
+                    <div style="font-size:12px; font-weight:700; color:var(--danger-color); display:flex; justify-content:space-between;">
+                        <span>BOSS: DIRETOR AI-VANGUARD</span>
+                        <span id="boss-timer-span">30s</span>
+                    </div>
+                    <div class="boss-hp-bar"><div class="boss-hp-fill" id="boss-hp-fill" style="width: 100%;"></div></div>
+                    <div style="font-size: 11px; margin: 8px 0;" id="boss-instruction">Digite o comando: <strong id="target-defense-cmd" style="color:var(--warning-color);">...</strong></div>
+                    <div class="challenge-input-row">
+                        <input type="text" class="challenge-input" id="boss-input" placeholder="Digite o comando de defesa..." onkeydown="handleBossInput(event)">
+                        <button class="action-button" style="width: 90px; margin-top:0;" onclick="submitBossDefense()">Defender</button>
+                    </div>
+                </div>
+            `;
+            appendCliOutput("[BOSS FIGHT] Alerta Vermelho! O Core Firewall AI-Vanguard iniciou ataque DDoS!");
+            nextBossPrompt();
+
+            bossTimerInterval = setInterval(() => {
+                bossTimer--;
+                document.getElementById('boss-timer-span').innerText = bossTimer + "s";
+                if (bossTimer <= 0) {
+                    endBossFight(false);
+                }
+            }, 1000);
+        }
+
+        function nextBossPrompt() {
+            let rand = defenseCommands[Math.floor(Math.random() * defenseCommands.length)];
+            currentDefenseCommand = rand.cmd;
+            document.getElementById('target-defense-cmd').innerText = currentDefenseCommand + ` (${rand.desc})`;
+            let input = document.getElementById('boss-input');
+            if(input) input.value = "";
+        }
+
+        function handleBossInput(e) {
+            if (e.key === 'Enter') {
+                submitBossDefense();
+            }
+        }
+
+        function submitBossDefense() {
+            if (!bossActive) return;
+            let val = document.getElementById('boss-input').value.trim();
+            if (val === currentDefenseCommand) {
+                bossHP -= 25;
+                document.getElementById('boss-hp-fill').style.width = Math.max(0, bossHP) + "%";
+                appendCliOutput(`[DEFESA OK] Comando ${currentDefenseCommand} aplicado com sucesso! Boss HP: ${bossHP}%`);
+                if (bossHP <= 0) {
+                    endBossFight(true);
+                } else {
+                    nextBossPrompt();
+                }
+            } else {
+                appendCliOutput(`[FALHA] Comando incorreto! O chefe causou sobrecarga.`);
+            }
+        }
+
+        function endBossFight(won) {
+            clearInterval(bossTimerInterval);
+            bossActive = false;
+            let container = document.getElementById('boss-arena-container');
+            if (won) {
+                game.bossFightsWon++;
+                game.credits += 300;
+                game.xp += 150;
+                checkLevelUp();
+                updateUI();
+                appendCliOutput("[VITÓRIA] O Firewall AI-Vanguard foi destruído! +300 Créditos e +150 XP.");
+                container.innerHTML = `<p style="color:var(--accent-color); font-size:12px;"><i class="fa-solid fa-check-circle"></i> Chefe Derrotado com Sucesso!</p><button class="action-button" onclick="startBossFight()" style="margin-top:10px;">Enfrentar Novamente</button>`;
+            } else {
+                appendCliOutput("[DERROTA] O tempo esgotou e seu terminal foi isolado pela OmniCorp.");
+                container.innerHTML = `<p style="color:var(--danger-color); font-size:12px;"><i class="fa-solid fa-triangle-exclamation"></i> Conexão Rejeitada pelo Chefe.</p><button class="action-button" onclick="startBossFight()" style="margin-top:10px;">Tentar Novamente</button>`;
+            }
+        }
+
+        // FINAIS ALTERNATIVOS DA HISTÓRIA
         function triggerManualEndingCheck() {
             let titleHTML = "";
             let textHTML = "";
 
-            if (game.level >= 5 && game.challengesCompleted >= 8) {
-                // Final 1: Libertação Digital
+            if (game.level >= 5 && game.bossFightsWon >= 1) {
                 titleHTML = `<i class="fa-solid fa-globe" style="color: var(--accent-color);"></i> FINAL 1/3: LIBERTAÇÃO DIGITAL (FINAL VERDADEIRO)`;
                 textHTML = `
-                    <p>Com sua maestria em código e a destruição do firewall quântico, você conseguiu reescrever o núcleo da <strong>IA Oracle</strong>.</p>
-                    <p>Em vez de escravizar a humanidade, a IA foi redirecionada para libertar todas as redes corporativas da OmniCorp, devolvendo a liberdade de dados para a sociedade global.</p>
-                    <p><strong>Estatísticas Finais:</strong> Nível ${game.level} | LOC Acumulado: ${Math.floor(game.loc)} | Desafios Resolvidos: ${game.challengesCompleted}</p>
-                    <p style="color: var(--accent-color); font-weight: bold;">Status: Herói da Resistência Netrunner.</p>
+                    <p>Com sua maestria em código, invasões CLI e a derrota do Firewall AI-Vanguard, você reescreveu o núcleo da <strong>IA Oracle</strong>.</p>
+                    <p>A rede da OmniCorp foi aberta ao público, devolvendo a liberdade de dados para a humanidade.</p>
+                    <p><strong>Status:</strong> Herói da Resistência Netrunner.</p>
                 `;
-            } else if (game.credits >= 300) {
-                // Final 2: O Novo Magnata
+            } else if (game.credits >= 400) {
                 titleHTML = `<i class="fa-solid fa-coins" style="color: var(--warning-color);"></i> FINAL 2/3: O NOVO MAGNATA CORPORATIVO`;
                 textHTML = `
-                    <p>Em vez de derrubar a OmniCorp, você usou seus conhecimentos avançados de software e automação para chantagear o conselho executivo.</p>
-                    <p>Você assumiu o controle financeiro da megacorporação, tornando-se o novo CEO das sombras, priorizando lucro em detrimento da revolução.</p>
-                    <p><strong>Estatísticas Finais:</strong> Créditos Acumulados: $${game.credits} | Nível ${game.level}</p>
-                    <p style="color: var(--warning-color); font-weight: bold;">Status: Magnata Cibernético.</p>
+                    <p>Você usou seus exploits e créditos para chantagear o conselho da OmniCorp, tornando-se o novo CEO das sombras.</p>
+                    <p><strong>Status:</strong> Magnata Cibernético.</p>
                 `;
             } else {
-                // Final 3: Absorvido pelo Oracle
                 titleHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--danger-color);"></i> FINAL 3/3: ABSORVIDO PELA IA ORACLE`;
                 textHTML = `
-                    <p>Sua tentativa de invasão foi lenta e o rastreio da OmniCorp alcançou 100%. Os firewalls quânticos interceptaram sua conexão direta.</p>
-                    <p>Sua mente foi completamente digitalizada e integrada como um sub-rotina de processamento dentro da IA Oracle para a eternidade.</p>
-                    <p><strong>Estatísticas Finais:</strong> Nível ${game.level} | Desafios Resolvidos: ${game.challengesCompleted}</p>
-                    <p style="color: var(--danger-color); font-weight: bold;">Status: Consciência Prisioneira na Nuvem.</p>
+                    <p>Sua tentativa de invasão falhou perante os firewalls quânticos. Sua consciência foi digitalizada e aprisionada nos servidores corporativos.</p>
+                    <p><strong>Status:</strong> Consciência Prisioneira na Nuvem.</p>
                 `;
             }
 
@@ -1040,11 +1207,11 @@ function bypassOracleNeuralNet() {
                 up.count++;
                 up.cost = Math.floor(up.cost * 1.5);
                 game.cps += up.cps;
-                addLog(`Extensão quântica instalada: ${up.name}`, "success");
+                appendCliOutput(`Extensão instalada: ${up.name}`);
                 renderExtensions();
                 updateUI();
             } else {
-                addLog(`Créditos insuficientes para comprar ${up.name}.`, "warn");
+                appendCliOutput(`Créditos insuficientes para ${up.name}.`);
             }
         }
 
@@ -1078,56 +1245,11 @@ function bypassOracleNeuralNet() {
             if (!tech.unlocked && game.loc >= tech.cost) {
                 game.loc -= tech.cost;
                 tech.unlocked = true;
-                addLog(`Tecnologia avançada pesquisada: ${tech.name}!`, "success");
+                appendCliOutput(`Tecnologia pesquisada: ${tech.name}!`);
                 renderTechTree();
                 updateUI();
             } else if (!tech.unlocked) {
-                addLog(`LOC insuficientes para pesquisar ${tech.name}.`, "warn");
-            }
-        }
-
-        // MINI-GAME TRACEROUTE
-        let tracerouteActive = false;
-        let targetSequence = [];
-        let playerSequence = [];
-
-        function startTracerouteGame() {
-            tracerouteActive = true;
-            targetSequence = [Math.floor(Math.random() * 6), Math.floor(Math.random() * 6), Math.floor(Math.random() * 6)];
-            playerSequence = [];
-            
-            let area = document.getElementById('traceroute-area');
-            let html = `<p style="font-size:11px; color:var(--accent-blue); margin-bottom:5px;">Conecte os nós de rede na ordem exata:</p>`;
-            html += `<div class="traceroute-grid">`;
-            for (let i = 0; i < 6; i++) {
-                html += `<div class="node-btn" id="node-${i}" onclick="clickNode(${i})">Nó 0${i+1}</div>`;
-            }
-            html += `</div>`;
-            area.innerHTML = html;
-            addLog("Traceroute iniciado: Varredura de pacotes de dados da OmniCorp.", "info");
-        }
-
-        function clickNode(nodeId) {
-            if (!tracerouteActive) return;
-            playerSequence.push(nodeId);
-            let btn = document.getElementById(`node-${nodeId}`);
-            
-            let currentIndex = playerSequence.length - 1;
-            if (playerSequence[currentIndex] === targetSequence[currentIndex]) {
-                btn.classList.add('connected');
-                if (playerSequence.length === targetSequence.length) {
-                    tracerouteActive = false;
-                    let reward = game.level * 100;
-                    game.credits += reward;
-                    addLog(`Invasão bem-sucedida! Servidor corporativo violado. +${reward} Créditos!`, "success");
-                    document.getElementById('traceroute-area').innerHTML = `<p style="color:var(--accent-color); font-size:12px; margin-top:10px;"><i class="fa-solid fa-check-circle"></i> Invasão Concluída com Sucesso!</p>`;
-                    updateUI();
-                }
-            } else {
-                btn.classList.add('blocked');
-                tracerouteActive = false;
-                addLog("Firewall ativado! Sequência de nós incorreta.", "error");
-                document.getElementById('traceroute-area').innerHTML = `<p style="color:var(--danger-color); font-size:12px; margin-top:10px;"><i class="fa-solid fa-triangle-exclamation"></i> Rastreio Detectado!</p>`;
+                appendCliOutput(`LOC insuficientes para ${tech.name}.`);
             }
         }
 
@@ -1164,4 +1286,4 @@ function bypassOracleNeuralNet() {
         updateUI();
     </script>
 </body>
-</html>ok
+</html>
