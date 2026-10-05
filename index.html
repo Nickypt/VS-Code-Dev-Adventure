@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -8,599 +7,21 @@
     <!-- Fontes e Ícones -->
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --bg-base: #1e1e1e;
-            --bg-sidebar: #252526;
-            --bg-activity: #333333;
-            --bg-editor: #1e1e1e;
-            --bg-terminal: #181818;
-            --border-color: #3f3f46;
-            --text-main: #d4d4d4;
-            --text-muted: #858585;
-            --accent-color: #00ff66;
-            --accent-glow: rgba(0, 255, 102, 0.3);
-            --accent-blue: #00f0ff;
-            --accent-purple: #bd93f9;
-            --danger-color: #ff5555;
-            --warning-color: #f1fa8c;
-        }
-
-        [data-theme="tokyo-night"] {
-            --bg-base: #1a1b26;
-            --bg-sidebar: #16161e;
-            --bg-activity: #24283b;
-            --bg-editor: #1a1b26;
-            --bg-terminal: #0f111a;
-            --border-color: #292e42;
-            --text-main: #c0caf5;
-            --text-muted: #565f89;
-            --accent-color: #7aa2f7;
-            --accent-glow: rgba(122, 162, 247, 0.3);
-            --accent-blue: #7dcfff;
-            --accent-purple: #bb9af7;
-            --danger-color: #f7768e;
-            --warning-color: #e0af68;
-        }
-
-        [data-theme="matrix"] {
-            --bg-base: #0a0e0a;
-            --bg-sidebar: #0f140f;
-            --bg-activity: #141f14;
-            --bg-editor: #0a0e0a;
-            --bg-terminal: #050705;
-            --border-color: #1e331e;
-            --text-main: #00ff66;
-            --text-muted: #008833;
-            --accent-color: #00ff66;
-            --accent-glow: rgba(0, 255, 102, 0.4);
-            --accent-blue: #00ffaa;
-            --accent-purple: #00cc44;
-            --danger-color: #ff3333;
-            --warning-color: #ffff00;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Fira Code', monospace;
-            user-select: none;
-        }
-
-        body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* TÍTULO / MENU SUPERIOR */
-        .titlebar {
-            height: 30px;
-            background-color: var(--bg-sidebar);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 10px;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .titlebar-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .window-controls {
-            display: flex;
-            gap: 8px;
-        }
-
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-        .dot.red { background-color: #ff5f56; }
-        .dot.yellow { background-color: #ffbd2e; }
-        .dot.green { background-color: #27c93f; }
-
-        .titlebar-center {
-            font-weight: 500;
-            color: var(--text-main);
-            letter-spacing: 0.5px;
-        }
-
-        .titlebar-right {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .top-btn {
-            background: none;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 2px 8px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 11px;
-            transition: 0.2s;
-        }
-
-        .top-btn:hover {
-            background-color: var(--accent-glow);
-            border-color: var(--accent-color);
-        }
-
-        /* LAYOUT PRINCIPAL */
-        .main-layout {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        /* BARRA DE ATIVIDADES */
-        .activity-bar {
-            width: 50px;
-            background-color: var(--bg-activity);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-right: 1px solid var(--border-color);
-        }
-
-        .activity-icons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-        }
-
-        .activity-icon {
-            width: 100%;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 18px;
-            cursor: pointer;
-            position: relative;
-            transition: 0.2s;
-        }
-
-        .activity-icon:hover, .activity-icon.active {
-            color: var(--accent-color);
-        }
-
-        .activity-icon.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 3px;
-            background-color: var(--accent-color);
-        }
-
-        /* BARRA LATERAL (SIDEBAR) */
-        .sidebar {
-            width: 310px;
-            background-color: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            transition: width 0.3s ease;
-        }
-
-        .sidebar-header {
-            padding: 10px 15px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .sidebar-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
-        }
-
-        .sidebar-section {
-            margin-bottom: 15px;
-        }
-
-        .sidebar-section h4 {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* PAINÉIS DA SIDEBAR */
-        .panel-view {
-            display: none;
-            height: 100%;
-            flex-direction: column;
-        }
-        .panel-view.active {
-            display: flex;
-        }
-
-        .stat-card {
-            background-color: var(--bg-base);
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-        }
-        .stat-card .label {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-        .stat-card .value {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--accent-color);
-        }
-
-        .action-button {
-            width: 100%;
-            background: linear-gradient(135deg, var(--accent-color), var(--accent-blue));
-            color: #000;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 5px;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 0.5px;
-        }
-        .action-button:hover {
-            opacity: 0.9;
-            box-shadow: 0 0 10px var(--accent-glow);
-            transform: translateY(-1px);
-        }
-        .action-button.danger {
-            background: linear-gradient(135deg, var(--danger-color), var(--warning-color));
-        }
-
-        .upgrade-item, .tech-item {
-            background-color: var(--bg-base);
-            border: 1px solid var(--border-color);
-            padding: 8px 10px;
-            border-radius: 5px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .upgrade-item:hover, .tech-item:hover {
-            border-color: var(--accent-color);
-            background-color: var(--border-color);
-        }
-        .upgrade-item.disabled, .tech-item.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .upgrade-title, .tech-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-main);
-            display: flex;
-            justify-content: space-between;
-        }
-        .upgrade-desc, .tech-desc {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 3px;
-        }
-        .upgrade-cost, .tech-cost {
-            font-size: 11px;
-            color: var(--warning-color);
-            margin-top: 4px;
-        }
-
-        /* EDITOR E TERMINAL */
-        .editor-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--bg-editor);
-            overflow: hidden;
-        }
-
-        .editor-tabs {
-            height: 35px;
-            background-color: var(--bg-sidebar);
-            display: flex;
-            border-bottom: 1px solid var(--border-color);
-            overflow-x: auto;
-        }
-
-        .tab {
-            padding: 0 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            border-right: 1px solid var(--border-color);
-            background-color: var(--bg-base);
-            color: var(--text-muted);
-            cursor: pointer;
-            border-top: 2px solid transparent;
-        }
-        .tab.active {
-            background-color: var(--bg-editor);
-            color: var(--text-main);
-            border-top-color: var(--accent-color);
-        }
-
-        .editor-body {
-            flex: 1;
-            display: flex;
-            position: relative;
-            overflow: auto;
-        }
-
-        .line-numbers {
-            width: 45px;
-            background-color: var(--bg-editor);
-            color: var(--text-muted);
-            text-align: right;
-            padding: 15px 10px 15px 0;
-            font-size: 13px;
-            line-height: 1.6;
-            user-select: none;
-            border-right: 1px solid var(--border-color);
-        }
-
-        .code-content {
-            flex: 1;
-            padding: 15px;
-            font-size: 13px;
-            line-height: 1.6;
-            color: var(--text-main);
-            white-space: pre-wrap;
-            outline: none;
-            background: transparent;
-            border: none;
-        }
-
-        /* PAINEL DE DESAFIOS NO EDITOR */
-        .challenge-box {
-            background-color: var(--bg-sidebar);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .challenge-title {
-            font-size: 13px;
-            color: var(--accent-blue);
-            font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .challenge-desc {
-            font-size: 12px;
-            color: var(--text-main);
-        }
-        .challenge-input-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 5px;
-        }
-        .challenge-input {
-            flex: 1;
-            background-color: var(--bg-base);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-family: 'Fira Code', monospace;
-            font-size: 12px;
-        }
-        .challenge-input:focus {
-            border-color: var(--accent-color);
-            outline: none;
-        }
-
-        /* TERMINAL CLI INTERATIVO (HACKNET STYLE) */
-        .terminal-panel {
-            height: 200px;
-            background-color: var(--bg-terminal);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .terminal-header {
-            height: 30px;
-            background-color: var(--bg-sidebar);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 15px;
-            font-size: 11px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .terminal-body {
-            flex: 1;
-            padding: 10px 15px;
-            font-size: 12px;
-            overflow-y: auto;
-            color: var(--accent-blue);
-            line-height: 1.4;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .cli-output {
-            flex: 1;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            margin-bottom: 5px;
-        }
-
-        .cli-input-line {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-top: 1px dashed var(--border-color);
-            padding-top: 5px;
-        }
-
-        .cli-prompt {
-            color: var(--accent-color);
-            font-weight: 700;
-        }
-
-        .cli-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            font-family: 'Fira Code', monospace;
-            font-size: 12px;
-            outline: none;
-        }
-
-        /* BOSS FIGHT CONSOLE PANEL */
-        .boss-arena {
-            background: rgba(255, 85, 85, 0.05);
-            border: 1px solid var(--danger-color);
-            padding: 15px;
-            border-radius: 6px;
-            margin-top: 10px;
-        }
-        .boss-hp-bar {
-            width: 100%;
-            height: 14px;
-            background: var(--bg-base);
-            border: 1px solid var(--border-color);
-            border-radius: 3px;
-            overflow: hidden;
-            margin: 8px 0;
-        }
-        .boss-hp-fill {
-            height: 100%;
-            background: var(--danger-color);
-            width: 100%;
-            transition: width 0.3s;
-        }
-
-        /* BARRA DE STATUS */
-        .statusbar {
-            height: 22px;
-            background-color: var(--accent-color);
-            color: #000;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 10px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-        .statusbar-left, .statusbar-right {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        .statusbar span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-        }
-
-        /* MODAIS */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-box {
-            background-color: var(--bg-sidebar);
-            border: 1px solid var(--accent-color);
-            box-shadow: 0 0 30px var(--accent-glow);
-            width: 650px;
-            max-width: 90%;
-            border-radius: 8px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .modal-title {
-            font-size: 18px;
-            color: var(--accent-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .modal-body {
-            font-size: 13px;
-            line-height: 1.6;
-            color: var(--text-main);
-            max-height: 380px;
-            overflow-y: auto;
-        }
-
-        .modal-body p { margin-bottom: 10px; }
-        .modal-body ul { margin-left: 20px; margin-bottom: 10px; }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-    </style>
+    <!-- Arquivo CSS Separado -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="cyberpunk">
 
-    <!-- MODAL DE BRIEFING -->
+    <!-- MODAL DE BRIEFING / HISTÓRIA COMPLEXA -->
     <div class="modal-overlay" id="briefing-modal">
         <div class="modal-box">
             <div class="modal-title">
                 <i class="fa-solid fa-brain"></i> OPERAÇÃO ORACLE: A CONSPIRAÇÃO OMNICORP
             </div>
             <div class="modal-body">
-                <p>Ano 2088. A megacorporação <strong>OmniCorp</strong> desenvolveu a <strong>IA Oracle</strong> — uma inteligência artificial quântica que absorve a consciência humana através da rede global.</p>
-                <p>Você é um Netrunner de elite da resistência clandestina. Para derrubar o sistema, você precisará resolver desafios de código com **recompensas massivas**, invadir servidores usando o **Terminal CLI interativo** e derrotar os implacáveis **Core Firewalls Bosses** da OmniCorp!</p>
-                <p><strong>Comandos do CLI:</strong> Digite <code>help</code> no terminal inferior a qualquer momento para ver os comandos disponíveis (<code>ls</code>, <code>cat</code>, <code>connect</code>, <code>hack</code>, etc.).</p>
+                <p>Ano 2088. A megacorporação <strong>OmniCorp</strong> monopolizou a economia global e desenvolveu a <strong>IA Oracle</strong> — uma inteligência artificial quântica projetada para absorver e digitalizar a consciência humana através da rede.</p>
+                <p>Você é um Netrunner de elite recrutado pela célula rebelde <em>The Resistance</em>. O seu objetivo é invadir os nós centrais da megacorporação resolvendo desafios de código e derrotando chefes de firewall.</p>
+                <p><strong>Nova Diretriz de Sobrecarga Térmica:</strong> O spam excessivo de cliques causa superaquecimento. Utilize extensões, Daemons de IA e desafios lógicos para progredir de forma estratégica!</p>
             </div>
             <div class="modal-footer">
                 <button class="action-button" onclick="closeBriefing()" style="width: auto; padding: 8px 20px;">INICIAR INFILTRAÇÃO <i class="fa-solid fa-arrow-right"></i></button>
@@ -612,19 +33,14 @@
     <div class="modal-overlay" id="help-modal" style="display: none;">
         <div class="modal-box">
             <div class="modal-title">
-                <i class="fa-solid fa-circle-question"></i> Guia do Netrunner & CLI
+                <i class="fa-solid fa-circle-question"></i> Guia do Netrunner (Ajuda)
             </div>
             <div class="modal-body">
-                <p><strong>Terminal CLI Interativo:</strong> No rodapé, digite comandos reais do estilo Hacknet/Linux:</p>
-                <ul>
-                    <li><code>help</code> - Lista comandos do sistema</li>
-                    <li><code>ls</code> - Lista arquivos e servidores visíveis</li>
-                    <li><code>cat [arquivo]</code> - Lê segredos e lore da OmniCorp</li>
-                    <li><code>connect [servidor]</code> - Conecta a nós externos</li>
-                    <li><code>hack</code> - Inicia varredura ou exploração</li>
-                    <li><code>clear</code> - Limpa o terminal</li>
-                </ul>
-                <p><strong>Batalhas de Chefe (Firewalls):</strong> Enfrente os diretores de segurança corporativa digitando comandos de defesa (<code>iptables -A</code>, <code>patch.fix()</code>, <code>ssl.renew()</code>) antes que o DDoS esgote sua barra de integridade.</p>
+                <p><strong>Editor & Desafios:</strong> Resolva os problemas de programação para ganhar recompensas massivas de LOC.</p>
+                <p><strong>Sobrecarga Térmica:</strong> Clicar repetidamente gera calor. Se atingir 100%, o terminal entra em *Throttling*.</p>
+                <p><strong>Daemons (🤖):</strong> Companheiros autônomos que geram recursos passivos.</p>
+                <p><strong>Batalha de Chefe (⚔️):</strong> Enfrente o Diretor AI-Vanguard digitando comandos de defesa contra DDoS.</p>
+                <p><strong>Terminal CLI (💻):</strong> Digite comandos reais no rodapé (`help`, `ls`, `cat`, `hack`, `connect`).</p>
             </div>
             <div class="modal-footer">
                 <button class="action-button" onclick="toggleModal('help-modal', false)" style="width: auto; padding: 8px 20px;">FECHAR GUIA</button>
@@ -632,7 +48,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE FINAL ALTERNATIVO -->
+    <!-- MODAL DE FINAL ALTERNATIVO (CINEMATOGRÁFICO) -->
     <div class="modal-overlay" id="ending-modal" style="display: none;">
         <div class="modal-box" style="border-color: var(--accent-blue);">
             <div class="modal-title" id="ending-title">
@@ -660,8 +76,14 @@
         </div>
         <div class="titlebar-right">
             <button class="top-btn" onclick="toggleTheme()"><i class="fa-solid fa-palette"></i> Tema</button>
-            <button class="top-btn" onclick="toggleModal('help-modal', true)"><i class="fa-solid fa-question"></i> Guia CLI</button>
+            <button class="top-btn" onclick="toggleModal('help-modal', true)"><i class="fa-solid fa-question"></i> Ajuda</button>
         </div>
+    </div>
+
+    <!-- TICKER DE NOTÍCIAS DO SUBMUNDO (CYBERNET NEWS) -->
+    <div class="news-ticker">
+        <div class="news-ticker-label"><i class="fa-solid fa-rss"></i> CYBERNET FEED:</div>
+        <div class="news-ticker-content" id="news-ticker-text">Conexão segura estabelecida com a rede rebelde. Aguardando movimentação de Netrunner...</div>
     </div>
 
     <!-- LAYOUT PRINCIPAL -->
@@ -672,8 +94,9 @@
             <div class="activity-icons">
                 <div class="activity-icon active" onclick="switchSidebar('explorer')" title="Explorador / Status"><i class="fa-regular fa-folder-open"></i></div>
                 <div class="activity-icon" onclick="switchSidebar('extensions')" title="Extensões & Automação"><i class="fa-solid fa-puzzle-piece"></i></div>
+                <div class="activity-icon" onclick="switchSidebar('daemons')" title="Daemons & Companheiros IA"><i class="fa-solid fa-robot"></i></div>
+                <div class="activity-icon" onclick="switchSidebar('boss')" title="Batalha de Chefe (Firewall)"><i class="fa-solid fa-shield-halved"></i></div>
                 <div class="activity-icon" onclick="switchSidebar('techtree')" title="Tech Tree & Educação"><i class="fa-solid fa-graduation-cap"></i></div>
-                <div class="activity-icon" onclick="switchSidebar('boss')" title="Batalhas de Chefe (Firewalls)"><i class="fa-solid fa-shield-halved"></i></div>
             </div>
             <div class="activity-icons">
                 <div class="activity-icon" onclick="triggerManualEndingCheck()" title="Avaliar Finais da História"><i class="fa-solid fa-award"></i></div>
@@ -704,10 +127,14 @@
                     </div>
                     <div class="stat-card">
                         <div class="label">Créditos Corporativos ($)</div>
-                        <div class="value" id="credits-count">0</div>
+                        <div class="value" id="credits-count">50</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Temperatura do Terminal</div>
+                        <div class="value" style="color: var(--warning-color);" id="heat-count">0%</div>
                     </div>
 
-                    <button class="action-button" onclick="writeCodeManual()"><i class="fa-solid fa-code"></i> Escrever Código [F5]</button>
+                    <button class="action-button" id="write-code-btn" onclick="writeCodeManual()"><i class="fa-solid fa-code"></i> Escrever Código [F5]</button>
                     <button class="action-button" onclick="triggerManualEndingCheck()" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue)); margin-top: 8px;"><i class="fa-solid fa-flag"></i> Desfecho da Missão</button>
                 </div>
 
@@ -719,22 +146,39 @@
                     </div>
                 </div>
 
+                <!-- PAINEL DAEMONS -->
+                <div id="panel-daemons" class="panel-view">
+                    <div class="sidebar-section">
+                        <h4><i class="fa-solid fa-microchip"></i> Daemons Assistentes IA</h4>
+                        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Recrute inteligências autônomas para minerar dados e acelerar sua evolução.</p>
+                        <div id="daemons-list"></div>
+                    </div>
+                </div>
+
+                <!-- PAINEL BATALHA DE CHEFE -->
+                <div id="panel-boss" class="panel-view">
+                    <div class="sidebar-section">
+                        <h4><i class="fa-solid fa-skull"></i> Firewall AI-Vanguard</h4>
+                        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Derrote o chefe corporativo digitando comandos de defesa antes que o tempo esgote.</p>
+                        <div id="boss-container">
+                            <div class="stat-card" style="margin-bottom: 10px;">
+                                <div class="label">HP do Chefe</div>
+                                <div class="value" style="color: var(--danger-color);" id="boss-hp">100 / 100</div>
+                            </div>
+                            <button class="action-button" id="start-boss-btn" onclick="startBossBattle()"><i class="fa-solid fa-play"></i> Iniciar Combate</button>
+                            <div id="boss-arena" style="margin-top: 10px; display: none;">
+                                <div id="boss-prompt" style="font-size: 11px; color: var(--warning-color); margin-bottom: 5px;">Digite: iptables -A</div>
+                                <input type="text" class="challenge-input" id="boss-input" placeholder="Comando de defesa..." onkeydown="checkBossInput(event)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- PAINEL TECH TREE -->
                 <div id="panel-techtree" class="panel-view">
                     <div class="sidebar-section">
                         <h4><i class="fa-solid fa-brain"></i> Árvore de Tecnologias</h4>
                         <div id="tech-list"></div>
-                    </div>
-                </div>
-
-                <!-- PAINEL DE BATALHA DE CHEFE -->
-                <div id="panel-boss" class="panel-view">
-                    <div class="sidebar-section">
-                        <h4><i class="fa-solid fa-skull"></i> Batalha de Firewall Core</h4>
-                        <div id="boss-arena-container">
-                            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Enfrente o Diretor AI-Vanguard e destrua seu núcleo de segurança!</p>
-                            <button class="action-button danger" onclick="startBossFight()"><i class="fa-solid fa-sword"></i> Iniciar Boss Fight</button>
-                        </div>
                     </div>
                 </div>
 
@@ -778,23 +222,22 @@ function bypassOracleNeuralNet() {
 
     </div>
 
-    <!-- TERMINAL CLI INTERATIVO (ESTILO HACKNET) -->
+    <!-- TERMINAL INFERIOR COM CLI INTERATIVO -->
     <div class="terminal-panel">
         <div class="terminal-header">
-            <div style="display:flex; gap:15px; align-items:center;">
-                <span style="color: var(--accent-color); font-weight:700;"><i class="fa-solid fa-terminal"></i> OMNI-CLI v3.8 (Interactive)</span>
+            <div class="terminal-tabs">
+                <span class="terminal-tab active">PROBLEMAS & LOGS DO ORACLE</span>
             </div>
-            <span>zsh - netrunner@omni-subnet</span>
+            <span>zsh - omni@netrunner</span>
         </div>
-        <div class="terminal-body">
-            <div class="cli-output" id="cli-output">
-[SYS_INIT] Omni-CLI carregado com sucesso.
-Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os segredos da OmniCorp.
-            </div>
-            <div class="cli-input-line">
-                <span class="cli-prompt">netrunner@omni:~$</span>
-                <input type="text" class="cli-input" id="cli-command-input" placeholder="Digite um comando (ex: help, ls, hack)..." onkeydown="handleCliInput(event)">
-            </div>
+        <div class="terminal-body" id="terminal-logs">
+            [SYS_INIT] Conexão segura estabelecida com o cluster central.<br>
+            [NARRATIVE] A IA Oracle monitora seus keystrokes. Use o terminal CLI abaixo (`help` para comandos).
+        </div>
+        <!-- PROMPT CLI INTERATIVO -->
+        <div class="terminal-cli-bar">
+            <span class="cli-prompt">netrunner@omni:~$</span>
+            <input type="text" class="cli-input" id="cli-input" placeholder="Digite um comando (ex: help, ls, hack)..." onkeydown="handleCliCommand(event)">
         </div>
     </div>
 
@@ -814,21 +257,26 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
 
     <!-- SCRIPT DE LÓGICA DO JOGO -->
     <script>
-        // ESTADO DO JOGO
         let game = {
             loc: 0,
             cps: 0,
             xp: 0,
             level: 1,
-            credits: 100,
+            credits: 50,
+            heat: 0,
+            throttled: false,
             titleIndex: 0,
             currentChallengeIndex: 0,
             challengesCompleted: 0,
-            bossFightsWon: 0,
             upgrades: {
                 prettier: { name: "Prettier Neural-Format", cost: 50, cps: 5, count: 0, desc: "Formata e programa linhas automaticamente." },
                 eslint: { name: "ESLint Cyber-Guard", cost: 300, cps: 25, count: 0, desc: "Remove bugs lógicos e gera código quântico." },
                 copilot: { name: "GitHub Copilot vX9", cost: 1500, cps: 120, count: 0, desc: "IA autônoma que escreve software em lote." }
+            },
+            daemons: {
+                ghost: { name: "Ghost.exe", cost: 200, cps: 15, count: 0, desc: "Daemon espião passivo. +15 CPS." },
+                daemonK: { name: "Daemon-K", cost: 800, cps: 70, count: 0, desc: "Minerador de dados corporativos. +70 CPS." },
+                overclock: { name: "Overclock-AI", cost: 3000, cps: 250, count: 0, desc: "Inteligência de pico de clock. +250 CPS." }
             },
             techs: {
                 variables: { name: "1. Variáveis & Tipos", cost: 150, unlocked: false, desc: "Armazenamento quântico. +10 LOC/clique.", type: "logic" },
@@ -838,7 +286,6 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
             }
         };
 
-        // LISTA DE DESAFIOS COM RECOMPENSAS MASSIVAS
         const challenges = [
             {
                 id: 1,
@@ -850,7 +297,7 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
                     let clean = input.replace(/\s+/g, '').toLowerCase();
                     return clean.includes("lettoken='omni_key_99'") || clean.includes('lettoken="omni_key_99"');
                 },
-                errorFeedback: "Erro de atribuição. Lembre-se da estrutura: `let nome = 'valor';`."
+                errorFeedback: "Erro de atribuição. Lembre-se da estrutura: `let nome = 'valor';`"
             },
             {
                 id: 2,
@@ -862,12 +309,12 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
                     let clean = input.replace(/\s+/g, '');
                     return clean.includes("nodes=['192.168.1.10','10.0.0.5']") || clean.includes('nodes=["192.168.1.10","10.0.0.5"]');
                 },
-                errorFeedback: "Erro na lista. Arrays usam colchetes `[...]` e strings com aspas."
+                errorFeedback: "Erro na lista. Arrays usam colchetes `[...]`."
             },
             {
                 id: 3,
                 title: "Validação de Segurança Condicional",
-                desc: "Escreva um <code>if</code> que avalie se <code>auth === true</code> e dentro dele chame a função <code>grantAccess()</code>.",
+                desc: "Escreva um <code>if</code> que avalie se <code>auth === true</code> e chame <code>grantAccess()</code>.",
                 reward: 1000,
                 hint: "Sintaxe correta: if (auth === true) { grantAccess(); }",
                 validator: (input) => {
@@ -892,18 +339,15 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
 
         const titles = ["[Junior Hacker]", "[Script Kiddie]", "[Fullstack Mercenary]", "[Cyber Security Specialist]", "[Master Netrunner]", "[OmniCorp Destroyer]"];
 
-        // ARQUIVOS DO SISTEMA CLI
-        const virtualFileSystem = {
-            "lore.txt": "ARQUIVO CONFIDENCIAL OMNICORP:\nProjeto Oracle nasceu em 2075 para absorver cérebros humanos em servidores quânticos. A resistência liderada por 'The Resistance' é a única barreira contra a extinção digital.",
-            "servers.txt": "NÓS CONHECIDOS DA OMNICORP:\n- 192.168.1.100 (Gateway Principal)\n- 10.0.44.12 (Banco de Dados Central Oracle)\n- 172.16.8.99 (Firewall de Defesa AI-Vanguard)",
-            "readme.md": "Bem-vindo ao Omni-CLI. Use 'help' para ver os comandos de exploração, 'cat [arquivo]' para ler segredos e 'connect [ip]' para invadir servidores."
-        };
+        function updateNews(msg) {
+            document.getElementById('news-ticker-text').innerText = msg;
+        }
 
-        // FUNÇÕES DE INTERFACE E MODAIS
         function closeBriefing() {
             document.getElementById('briefing-modal').style.display = 'none';
             loadCurrentChallenge();
-            appendCliOutput("Infiltração iniciada. IA Oracle monitorando atividade na rede.");
+            addLog("Infiltração iniciada. Sistema Oracle vulnerável.", "success");
+            updateNews("URGENTE: Atividade suspeita de Netrunner detectada no cluster corporativo.");
         }
 
         function toggleModal(modalId, show) {
@@ -917,89 +361,29 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
             event.currentTarget.classList.add('active');
             document.getElementById('panel-' + viewId).classList.add('active');
 
-            const titlesMap = { explorer: "Explorador", extensions: "Extensões", techtree: "Tech Tree", boss: "Batalha de Chefe" };
+            const titlesMap = { explorer: "Explorador", extensions: "Extensões", daemons: "Daemons IA", boss: "Batalha de Chefe", techtree: "Tech Tree" };
             document.getElementById('sidebar-title').innerText = titlesMap[viewId];
         }
 
         let currentThemeIndex = 0;
-        const themes = ["cyberpunk", "tokyo-night", "matrix"];
+        const themes = ["cyberpunk", "tokyo-night", "dracula"];
         function toggleTheme() {
             currentThemeIndex = (currentThemeIndex + 1) % themes.length;
             document.body.setAttribute("data-theme", themes[currentThemeIndex]);
-            appendCliOutput(`Tema alterado para: ${themes[currentThemeIndex]}`);
+            addLog(`Tema alterado para: ${themes[currentThemeIndex]}`, "info");
         }
 
-        function appendCliOutput(text) {
-            const out = document.getElementById('cli-output');
-            out.innerHTML += `\n> ${text}`;
-            out.scrollTop = out.scrollHeight;
+        function addLog(msg, type = "info") {
+            const term = document.getElementById('terminal-logs');
+            let cssClass = "";
+            if (type === "success") cssClass = "log-success";
+            if (type === "error") cssClass = "log-error";
+            if (type === "warn") cssClass = "log-warn";
+            
+            term.innerHTML += `<br><span class="${cssClass}">[${new Date().toLocaleTimeString()}] ${msg}</span>`;
+            term.scrollTop = term.scrollHeight;
         }
 
-        // TERMINAL CLI INTERATIVO (HACKNET STYLE)
-        function handleCliInput(e) {
-            if (e.key === 'Enter') {
-                let inputField = document.getElementById('cli-command-input');
-                let cmd = inputField.value.trim();
-                if (!cmd) return;
-
-                appendCliOutput(`netrunner@omni:~$ ${cmd}`);
-                processCliCommand(cmd);
-                inputField.value = "";
-            }
-        }
-
-        function processCliCommand(rawCmd) {
-            let parts = rawCmd.split(' ');
-            let cmd = parts[0].toLowerCase();
-            let arg = parts[1] || "";
-
-            switch (cmd) {
-                case 'help':
-                    appendCliOutput("Comandos disponíveis:\n  help - Exibe esta ajuda\n  ls - Lista arquivos do diretório atual\n  cat [arquivo] - Lê o conteúdo de um arquivo\n  connect [ip] - Conecta a um servidor remoto da OmniCorp\n  hack - Inicia varredura e coleta créditos\n  clear - Limpa o terminal");
-                    break;
-                case 'ls':
-                    appendCliOutput("Arquivos disponíveis:\n" + Object.keys(virtualFileSystem).join("  "));
-                    break;
-                case 'cat':
-                    if (!arg) {
-                        appendCliOutput("Erro: Especifique o arquivo. Ex: cat lore.txt");
-                    } else if (virtualFileSystem[arg]) {
-                        appendCliOutput(virtualFileSystem[arg]);
-                    } else {
-                        appendCliOutput(`Erro: Arquivo '${arg}' não encontrado.`);
-                    }
-                    break;
-                case 'connect':
-                    if (!arg) {
-                        appendCliOutput("Erro: Especifique o IP. Ex: connect 192.168.1.100");
-                    } else {
-                        appendCliOutput(`Conectando ao alvo ${arg}... Handshake quântico estabelecido.`);
-                        game.credits += 25;
-                        game.xp += 10;
-                        checkLevelUp();
-                        updateUI();
-                        appendCliOutput("Servidor invadido com sucesso! +25 Créditos coletados.");
-                    }
-                    break;
-                case 'hack':
-                    let reward = 150;
-                    game.loc += reward;
-                    game.xp += 15;
-                    checkLevelUp();
-                    updateUI();
-                    appendCliOutput(`[EXPLOIT] Varredura executada com sucesso! +${reward} LOC obtidos.`);
-                    break;
-                case 'clear':
-                    document.getElementById('cli-output.innerText = ""');
-                    document.getElementById('cli-output').innerHTML = "[SYS_INIT] Terminal limpo.";
-                    break;
-                default:
-                    appendCliOutput(`Comando desconhecido: '${cmd}'. Digite 'help' para ajuda.`);
-                    break;
-            }
-        }
-
-        // DESAFIOS E RECOMPENSAS MASSIVAS
         function loadCurrentChallenge() {
             let ch = challenges[game.currentChallengeIndex % challenges.length];
             document.getElementById('challenge-num').innerText = ch.id + (Math.floor(game.currentChallengeIndex / challenges.length) * 4);
@@ -1013,32 +397,50 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
             let ch = challenges[game.currentChallengeIndex % challenges.length];
 
             if (!inputVal.trim()) {
-                appendCliOutput("Campo de código vazio. Insira seu payload antes de injetar.");
+                addLog("Campo de código vazio. Insira seu payload.", "warn");
                 return;
             }
 
-            let isCorrect = ch.validator(inputVal);
-
-            if (isCorrect) {
+            if (ch.validator(inputVal)) {
                 game.loc += ch.reward;
                 game.xp += 40;
                 game.challengesCompleted++;
-                appendCliOutput(`[SUCESSO] Payload injetado com êxito! +${ch.reward} LOC e +40 XP.`);
+                addLog(`[SUCESSO] Payload injetado! +${ch.reward} LOC e +40 XP.`, "success");
                 checkLevelUp();
                 
                 game.currentChallengeIndex++;
                 loadCurrentChallenge();
                 updateUI();
+                updateNews(`Netrunner concluiu desafio #${ch.id}. A OmniCorp reforça os firewalls.`);
             } else {
-                appendCliOutput(`[ALERTA] Falha na injeção. Dica: ${ch.hint}`);
+                addLog(`[ALERTA ORACLE] Falha na injeção.`, "error");
+                addLog(`Dica: ${ch.hint}`, "warn");
             }
         }
 
         function writeCodeManual() {
+            if (game.throttled) {
+                addLog("Terminal em Throttling por superaquecimento! Aguarde.", "warn");
+                return;
+            }
+
+            game.heat += 12;
+            if (game.heat >= 100) {
+                game.heat = 100;
+                game.throttled = true;
+                addLog("SUPERACECIMENTO! Terminal bloqueado por 5 segundos.", "error");
+                setTimeout(() => {
+                    game.throttled = false;
+                    game.heat = 0;
+                    addLog("Termopar resfriado. Terminal liberado.", "success");
+                    updateUI();
+                }, 5000);
+            }
+
             let power = 1;
             if (game.techs.variables.unlocked) power += 10;
             game.loc += power;
-            game.xp += 2;
+            game.xp += 1.5;
             checkLevelUp();
             updateUI();
         }
@@ -1051,139 +453,35 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
                 if (game.level % 2 === 0 && game.titleIndex < titles.length - 1) {
                     game.titleIndex++;
                     document.getElementById('player-title-display').innerText = titles[game.titleIndex];
-                    appendCliOutput(`PARABÉNS! Cargo atualizado para: ${titles[game.titleIndex]}`);
+                    addLog(`PARABÉNS! Cargo atualizado para: ${titles[game.titleIndex]}`, "success");
+                    updateNews(`URGENTE: Netrunner ascende ao cargo de ${titles[game.titleIndex]}!`);
                 }
-                appendCliOutput(`Subiu para o Nível ${game.level}! +75 Créditos.`);
+                addLog(`Subiu para o Nível ${game.level}! +75 Créditos.`, "success");
             }
         }
 
-        // BATALHA DE CHEFE (AI-VANGUARD BOSS FIGHT)
-        let bossActive = false;
-        let bossHP = 100;
-        let bossMaxHP = 100;
-        let bossTimer = 30;
-        let bossTimerInterval = null;
-        let currentDefenseCommand = "";
-        const defenseCommands = [
-            { cmd: "iptables -A", desc: "Bloqueia tráfego DDoS do Firewall" },
-            { cmd: "patch.fix()", desc: "Corrige vulnerabilidade no núcleo" },
-            { cmd: "ssl.renew()", desc: "Renova certificado de criptografia" }
-        ];
-
-        function startBossFight() {
-            if (bossActive) return;
-            bossActive = true;
-            bossHP = 100;
-            bossTimer = 30;
-
-            let container = document.getElementById('boss-arena-container');
-            container.innerHTML = `
-                <div class="boss-arena">
-                    <div style="font-size:12px; font-weight:700; color:var(--danger-color); display:flex; justify-content:space-between;">
-                        <span>BOSS: DIRETOR AI-VANGUARD</span>
-                        <span id="boss-timer-span">30s</span>
-                    </div>
-                    <div class="boss-hp-bar"><div class="boss-hp-fill" id="boss-hp-fill" style="width: 100%;"></div></div>
-                    <div style="font-size: 11px; margin: 8px 0;" id="boss-instruction">Digite o comando: <strong id="target-defense-cmd" style="color:var(--warning-color);">...</strong></div>
-                    <div class="challenge-input-row">
-                        <input type="text" class="challenge-input" id="boss-input" placeholder="Digite o comando de defesa..." onkeydown="handleBossInput(event)">
-                        <button class="action-button" style="width: 90px; margin-top:0;" onclick="submitBossDefense()">Defender</button>
-                    </div>
-                </div>
-            `;
-            appendCliOutput("[BOSS FIGHT] Alerta Vermelho! O Core Firewall AI-Vanguard iniciou ataque DDoS!");
-            nextBossPrompt();
-
-            bossTimerInterval = setInterval(() => {
-                bossTimer--;
-                document.getElementById('boss-timer-span').innerText = bossTimer + "s";
-                if (bossTimer <= 0) {
-                    endBossFight(false);
-                }
-            }, 1000);
-        }
-
-        function nextBossPrompt() {
-            let rand = defenseCommands[Math.floor(Math.random() * defenseCommands.length)];
-            currentDefenseCommand = rand.cmd;
-            document.getElementById('target-defense-cmd').innerText = currentDefenseCommand + ` (${rand.desc})`;
-            let input = document.getElementById('boss-input');
-            if(input) input.value = "";
-        }
-
-        function handleBossInput(e) {
-            if (e.key === 'Enter') {
-                submitBossDefense();
-            }
-        }
-
-        function submitBossDefense() {
-            if (!bossActive) return;
-            let val = document.getElementById('boss-input').value.trim();
-            if (val === currentDefenseCommand) {
-                bossHP -= 25;
-                document.getElementById('boss-hp-fill').style.width = Math.max(0, bossHP) + "%";
-                appendCliOutput(`[DEFESA OK] Comando ${currentDefenseCommand} aplicado com sucesso! Boss HP: ${bossHP}%`);
-                if (bossHP <= 0) {
-                    endBossFight(true);
-                } else {
-                    nextBossPrompt();
-                }
-            } else {
-                appendCliOutput(`[FALHA] Comando incorreto! O chefe causou sobrecarga.`);
-            }
-        }
-
-        function endBossFight(won) {
-            clearInterval(bossTimerInterval);
-            bossActive = false;
-            let container = document.getElementById('boss-arena-container');
-            if (won) {
-                game.bossFightsWon++;
-                game.credits += 300;
-                game.xp += 150;
-                checkLevelUp();
-                updateUI();
-                appendCliOutput("[VITÓRIA] O Firewall AI-Vanguard foi destruído! +300 Créditos e +150 XP.");
-                container.innerHTML = `<p style="color:var(--accent-color); font-size:12px;"><i class="fa-solid fa-check-circle"></i> Chefe Derrotado com Sucesso!</p><button class="action-button" onclick="startBossFight()" style="margin-top:10px;">Enfrentar Novamente</button>`;
-            } else {
-                appendCliOutput("[DERROTA] O tempo esgotou e seu terminal foi isolado pela OmniCorp.");
-                container.innerHTML = `<p style="color:var(--danger-color); font-size:12px;"><i class="fa-solid fa-triangle-exclamation"></i> Conexão Rejeitada pelo Chefe.</p><button class="action-button" onclick="startBossFight()" style="margin-top:10px;">Tentar Novamente</button>`;
-            }
-        }
-
-        // FINAIS ALTERNATIVOS DA HISTÓRIA
+        // SISTEMA DE FINAIS
         function triggerManualEndingCheck() {
-            let titleHTML = "";
-            let textHTML = "";
-
-            if (game.level >= 5 && game.bossFightsWon >= 1) {
-                titleHTML = `<i class="fa-solid fa-globe" style="color: var(--accent-color);"></i> FINAL 1/3: LIBERTAÇÃO DIGITAL (FINAL VERDADEIRO)`;
-                textHTML = `
-                    <p>Com sua maestria em código, invasões CLI e a derrota do Firewall AI-Vanguard, você reescreveu o núcleo da <strong>IA Oracle</strong>.</p>
-                    <p>A rede da OmniCorp foi aberta ao público, devolvendo a liberdade de dados para a humanidade.</p>
-                    <p><strong>Status:</strong> Herói da Resistência Netrunner.</p>
-                `;
-            } else if (game.credits >= 400) {
+            let titleHTML = "", textHTML = "";
+            if (game.level >= 5 && game.challengesCompleted >= 8) {
+                titleHTML = `<i class="fa-solid fa-globe" style="color: var(--accent-color);"></i> FINAL 1/3: LIBERTAÇÃO DIGITAL (VERDADEIRO)`;
+                textHTML = `<p>Você reescreveu o núcleo da <strong>IA Oracle</strong> e devolveu a liberdade de dados para a sociedade global.</p>`;
+                updateNews("HISTÓRICO: A IA Oracle foi subjugada. A rede mundial está livre!");
+            } else if (game.credits >= 300) {
                 titleHTML = `<i class="fa-solid fa-coins" style="color: var(--warning-color);"></i> FINAL 2/3: O NOVO MAGNATA CORPORATIVO`;
-                textHTML = `
-                    <p>Você usou seus exploits e créditos para chantagear o conselho da OmniCorp, tornando-se o novo CEO das sombras.</p>
-                    <p><strong>Status:</strong> Magnata Cibernético.</p>
-                `;
+                textHTML = `<p>Você chantageou o conselho da OmniCorp e assumiu o controle financeiro da megacorporação.</p>`;
+                updateNews("NOTÍCIA: Misterioso Netrunner assume o controle acionário da OmniCorp.");
             } else {
                 titleHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--danger-color);"></i> FINAL 3/3: ABSORVIDO PELA IA ORACLE`;
-                textHTML = `
-                    <p>Sua tentativa de invasão falhou perante os firewalls quânticos. Sua consciência foi digitalizada e aprisionada nos servidores corporativos.</p>
-                    <p><strong>Status:</strong> Consciência Prisioneira na Nuvem.</p>
-                `;
+                textHTML = `<p>Sua conexão foi interceptada e sua mente foi digitalizada como sub-rotina do Oracle.</p>`;
+                updateNews("ALERTA: Invasão falhou. Consciência de Netrunner assimilada pelo mainframe.");
             }
-
             document.getElementById('ending-title').innerHTML = titleHTML;
             document.getElementById('ending-text').innerHTML = textHTML;
             document.getElementById('ending-modal').style.display = 'flex';
         }
 
-        // EXTENSÕES E TECH TREE
+        // EXTENSÕES E DAEMONS
         function renderExtensions() {
             const list = document.getElementById('extensions-list');
             list.innerHTML = "";
@@ -1207,14 +505,42 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
                 up.count++;
                 up.cost = Math.floor(up.cost * 1.5);
                 game.cps += up.cps;
-                appendCliOutput(`Extensão instalada: ${up.name}`);
+                addLog(`Extensão instalada: ${up.name}`, "success");
                 renderExtensions();
                 updateUI();
-            } else {
-                appendCliOutput(`Créditos insuficientes para ${up.name}.`);
             }
         }
 
+        function renderDaemons() {
+            const list = document.getElementById('daemons-list');
+            list.innerHTML = "";
+            for (let key in game.daemons) {
+                let d = game.daemons[key];
+                let canBuy = game.credits >= d.cost;
+                list.innerHTML += `
+                    <div class="upgrade-item ${canBuy ? '' : 'disabled'}" onclick="buyDaemon('${key}')">
+                        <div class="upgrade-title">${d.name} <span>x${d.count}</span></div>
+                        <div class="upgrade-desc">${d.desc}</div>
+                        <div class="upgrade-cost"><i class="fa-solid fa-coins"></i> ${d.cost} Créditos</div>
+                    </div>
+                `;
+            }
+        }
+
+        function buyDaemon(key) {
+            let d = game.daemons[key];
+            if (game.credits >= d.cost) {
+                game.credits -= d.cost;
+                d.count++;
+                d.cost = Math.floor(d.cost * 1.6);
+                game.cps += d.cps;
+                addLog(`Daemon contratado: ${d.name}`, "success");
+                renderDaemons();
+                updateUI();
+            }
+        }
+
+        // TECH TREE
         function renderTechTree() {
             const list = document.getElementById('tech-list');
             list.innerHTML = "";
@@ -1245,11 +571,85 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
             if (!tech.unlocked && game.loc >= tech.cost) {
                 game.loc -= tech.cost;
                 tech.unlocked = true;
-                appendCliOutput(`Tecnologia pesquisada: ${tech.name}!`);
+                addLog(`Tecnologia pesquisada: ${tech.name}!`, "success");
                 renderTechTree();
                 updateUI();
-            } else if (!tech.unlocked) {
-                appendCliOutput(`LOC insuficientes para ${tech.name}.`);
+            }
+        }
+
+        // BATALHA DE CHEFE
+        let bossActive = false;
+        let bossHp = 100;
+        const bossCommands = ["iptables -A", "patch.fix()", "ssl.renew()", "flush_dns"];
+        let currentBossCmd = "";
+
+        function startBossBattle() {
+            bossActive = true;
+            bossHp = 100;
+            document.getElementById('boss-arena').style.display = 'block';
+            document.getElementById('start-boss-btn').style.display = 'none';
+            nextBossCommand();
+            addLog("Batalha de Chefe iniciada contra o Diretor AI-Vanguard!", "warn");
+        }
+
+        function nextBossCommand() {
+            currentBossCmd = bossCommands[Math.floor(Math.random() * bossCommands.length)];
+            document.getElementById('boss-prompt').innerText = `Digite rápido: ${currentBossCmd}`;
+            document.getElementById('boss-input').value = "";
+        }
+
+        function checkBossInput(e) {
+            if (e.key === 'Enter' && bossActive) {
+                let val = document.getElementById('boss-input').value.trim();
+                if (val === currentBossCmd) {
+                    bossHp -= 25;
+                    document.getElementById('boss-hp').innerText = `${Math.max(0, bossHp)} / 100`;
+                    addLog(`Dano infligido ao Firewall do Chefe!`, "success");
+                    if (bossHp <= 0) {
+                        bossActive = false;
+                        game.credits += 300;
+                        game.xp += 150;
+                        addLog("Chefe AI-Vanguard derrotado! +300 Créditos e +150 XP.", "success");
+                        document.getElementById('boss-arena').style.display = 'none';
+                        document.getElementById('start-boss-btn').style.display = 'block';
+                        updateUI();
+                        updateNews("VITÓRIA: O firewall de elite do Diretor AI-Vanguard foi pulverizado.");
+                    } else {
+                        nextBossCommand();
+                    }
+                } else {
+                    addLog("Comando de defesa incorreto!", "error");
+                }
+            }
+        }
+
+        // TERMINAL CLI INTERATIVO
+        function handleCliCommand(e) {
+            if (e.key === 'Enter') {
+                let input = document.getElementById('cli-input');
+                let cmd = input.value.trim().toLowerCase();
+                input.value = "";
+
+                if (!cmd) return;
+                addLog(`netrunner@omni:~$ ${cmd}`, "info");
+
+                if (cmd === "help") {
+                    addLog("Comandos disponíveis: help, ls, cat [arquivo], hack, status, clear", "success");
+                } else if (cmd === "ls") {
+                    addLog("Arquivos no diretório: oracle_core.conf, firewall_rules.py, segredos_omni.txt", "success");
+                } else if (cmd === "cat segredos_omni.txt") {
+                    addLog("[CONFIDENCIAL] A IA Oracle foi construída usando mentes humanas digitalizadas em 2072.", "warn");
+                } else if (cmd === "hack") {
+                    game.credits += 50;
+                    addLog("Invasão de sub-servidor bem-sucedida! +50 Créditos.", "success");
+                    updateUI();
+                } else if (cmd === "status") {
+                    addLog(`Nível: ${game.level} | LOC: ${Math.floor(game.loc)} | Créditos: $${game.credits}`, "info");
+                } else if (cmd === "clear") {
+                    document.getElementById('terminal-logs').innerHTML = "[SYS_INIT] Terminal limpo.";
+                } else {
+                    addLog(`Comando desconhecido: ${cmd}. Digite 'help'.`, "error");
+                }
             }
         }
 
@@ -1259,12 +659,22 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
             document.getElementById('xp-count').innerText = Math.floor(game.xp);
             document.getElementById('level-count').innerText = game.level;
             document.getElementById('credits-count').innerText = game.credits;
+            document.getElementById('heat-count').innerText = game.heat + "%";
+
+            let btn = document.getElementById('write-code-btn');
+            if (game.throttled) {
+                btn.style.opacity = '0.4';
+                btn.innerText = "THROTTLED (Aguarde)";
+            } else {
+                btn.style.opacity = '1';
+                btn.innerText = "Escrever Código [F5]";
+            }
 
             renderExtensions();
+            renderDaemons();
             renderTechTree();
         }
 
-        // LOOP PRINCIPAL DE CPS
         setInterval(() => {
             if (game.cps > 0) {
                 game.loc += game.cps / 10;
@@ -1272,9 +682,12 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
                 checkLevelUp();
                 updateUI();
             }
+            if (game.heat > 0 && !game.throttled) {
+                game.heat = Math.max(0, game.heat - 2);
+                document.getElementById('heat-count').innerText = game.heat + "%";
+            }
         }, 100);
 
-        // ATALHOS
         window.addEventListener('keydown', (e) => {
             if (e.key === 'F5') {
                 e.preventDefault();
@@ -1282,7 +695,6 @@ Digite 'help' para listar os comandos disponíveis ou 'cat lore.txt' para ler os
             }
         });
 
-        // Inicialização
         updateUI();
     </script>
 </body>
