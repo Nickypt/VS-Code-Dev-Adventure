@@ -243,26 +243,6 @@
             display: flex;
         }
 
-        /* Explorer Items */
-        .file-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            color: var(--text-main);
-            transition: 0.15s;
-        }
-        .file-item:hover {
-            background-color: var(--border-color);
-        }
-        .file-item.active {
-            background-color: var(--accent-glow);
-            color: var(--accent-color);
-        }
-
         /* Game stats in sidebar */
         .stat-card {
             background-color: var(--bg-base);
@@ -402,6 +382,48 @@
             outline: none;
             background: transparent;
             border: none;
+            caret-color: var(--accent-color);
+        }
+
+        /* PAINEL DE DESAFIOS NO EDITOR */
+        .challenge-box {
+            background-color: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .challenge-title {
+            font-size: 13px;
+            color: var(--accent-blue);
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .challenge-desc {
+            font-size: 12px;
+            color: var(--text-main);
+        }
+        .challenge-input-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .challenge-input {
+            flex: 1;
+            background-color: var(--bg-base);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+        }
+        .challenge-input:focus {
+            border-color: var(--accent-color);
+            outline: none;
         }
 
         /* TERMINAL INFERIOR */
@@ -474,7 +496,7 @@
             cursor: pointer;
         }
 
-        /* MODAIS / POPUPS / BRIEFING */
+        /* MODAIS */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -526,7 +548,7 @@
             gap: 10px;
         }
 
-        /* MINI-GAME DE INVASÃO (TRACEROUTE) */
+        /* MINI-GAME TRACEROUTE */
         .traceroute-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -569,14 +591,13 @@
                 <i class="fa-solid fa-terminal"></i> VS CODE DEV ADVENTURE: CYBERPUNK ELITE
             </div>
             <div class="modal-body">
-                <p>Bem-vindo, <strong>Netrunner</strong>. Estamos em 2088. A megacorporação <strong>OmniCorp</strong> assumiu o controle da rede global de dados, aprisionando a humanidade em um algoritmo de vigilância em massa.</p>
-                <p>Sua missão é infiltrar os servidores centrais, escalar privilégios e derrubar o sistema corporativo.</p>
+                <p>Bem-vindo, <strong>Netrunner</strong>. Estamos em 2088. A megacorporação <strong>OmniCorp</strong> assumiu o controle da rede global de dados.</p>
+                <p>Sua missão é infiltrar os servidores centrais resolvendo <strong>Desafios Reais de Programação</strong> no editor de código e escalando privilégios!</p>
                 <p><strong>Como Jogar:</strong></p>
                 <ul>
-                    <li>Clique no botão <strong>"Escrever Código"</strong> na barra lateral ou aperte <strong>F5 / Espaço</strong> para gerar Linhas de Código (LOC).</li>
-                    <li>Gaste LOC para comprar <strong>Extensões</strong> que geram código automáticas por segundo (CPS).</li>
-                    <li>Evolua na <strong>Tech Tree</strong> para aprender conceitos reais de Programação, Cibersegurança e Arquitetura de Software.</li>
-                    <li>Use o painel de <strong>Invasão (Traceroute)</strong> para invadir nós da OmniCorp e coletar Bounties em Créditos Corporativos!</li>
+                    <li>Resolva as perguntas de código no painel superior do editor para ganhar LOC e XP.</li>
+                    <li>Se errar, o sistema exibirá uma explicação detalhada de como corrigir e boas práticas.</li>
+                    <li>Compre <strong>Extensões</strong> para gerar código automaticamente e evolua na <strong>Tech Tree</strong>.</li>
                 </ul>
             </div>
             <div class="modal-footer">
@@ -585,18 +606,17 @@
         </div>
     </div>
 
-    <!-- MODAL DE HELP / GUIA -->
+    <!-- MODAL DE HELP -->
     <div class="modal-overlay" id="help-modal" style="display: none;">
         <div class="modal-box">
             <div class="modal-title">
                 <i class="fa-solid fa-circle-question"></i> Guia do Netrunner (Ajuda)
             </div>
             <div class="modal-body">
-                <p><strong>Painel Explorador (Pasta):</strong> Mostra seus recursos principais (Linhas de Código, XP, Créditos e Nível).</p>
-                <p><strong>Extensões (🧩):</strong> Automatizam sua produção de código. Quanto mais extensões comprar, mais rápido seu bot de invasão roda sozinho.</p>
-                <p><strong>Tech Tree (🌳):</strong> O lugar onde você aprende programação real. Cada tecnologia desbloqueada aumenta drasticamente o ganho de XP e LOC.</p>
-                <p><strong>Traceroute / Invasão (🌐):</strong> Mini-game estratégico onde você conecta nós de rede em sequência antes que o firewall detecte a invasão.</p>
-                <p><strong>Temas (🎨):</strong> Alterne entre o padrão Cyberpunk, Tokyo Night e Dracula na barra superior.</p>
+                <p><strong>Editor de Desafios (Centro):</strong> Digite o comando correto solicitado (ex: criar variáveis, listas `[]`, loops ou condicionais) e clique em "Validar Código".</p>
+                <p><strong>Feedback Educacional:</strong> Caso erre, o terminal trará uma análise completa do erro apontando por que falhou e como estruturar o código corretamente.</p>
+                <p><strong>Extensões (🧩):</strong> Automatizam sua produção de código por segundo (CPS).</p>
+                <p><strong>Tech Tree (🌳):</strong> Onde você desbloqueia conceitos avançados de programação e cibersegurança.</p>
             </div>
             <div class="modal-footer">
                 <button class="action-button" onclick="toggleModal('help-modal', false)" style="width: auto; padding: 8px 20px;">FECHAR GUIA</button>
@@ -673,23 +693,19 @@
                 <div id="panel-extensions" class="panel-view">
                     <div class="sidebar-section">
                         <h4><i class="fa-solid fa-plug"></i> Mercado de Extensões</h4>
-                        <div id="extensions-list">
-                            <!-- Gerado via JS -->
-                        </div>
+                        <div id="extensions-list"></div>
                     </div>
                 </div>
 
-                <!-- PAINEL TECH TREE (EDUCAÇÃO) -->
+                <!-- PAINEL TECH TREE -->
                 <div id="panel-techtree" class="panel-view">
                     <div class="sidebar-section">
                         <h4><i class="fa-solid fa-brain"></i> Árvore de Tecnologias</h4>
-                        <div id="tech-list">
-                            <!-- Gerado via JS -->
-                        </div>
+                        <div id="tech-list"></div>
                     </div>
                 </div>
 
-                <!-- PAINEL TRACEROUTE (INVASÃO) -->
+                <!-- PAINEL TRACEROUTE -->
                 <div id="panel-traceroute" class="panel-view">
                     <div class="sidebar-section">
                         <h4><i class="fa-solid fa-shield-halved"></i> Hackear OmniCorp</h4>
@@ -702,25 +718,33 @@
             </div>
         </div>
 
-        <!-- EDITOR DE CÓDIGO -->
+        <!-- EDITOR DE CÓDIGO COM DESAFIOS -->
         <div class="editor-container">
             <div class="editor-tabs">
                 <div class="tab active"><i class="fa-brands fa-js" style="color: #f1fa8c;"></i> main_exploit.js</div>
                 <div class="tab"><i class="fa-brands fa-python" style="color: #8be9fd;"></i> core_defense.py</div>
             </div>
+
+            <!-- PAINEL DE DESAFIO ATIVO -->
+            <div class="challenge-box" id="challenge-box">
+                <div class="challenge-title">
+                    <span><i class="fa-solid fa-terminal"></i> DESAFIO DE PROGRAMAÇÃO #<span id="challenge-num">1</span></span>
+                    <span style="font-size: 11px; color: var(--warning-color);" id="challenge-reward">Recompensa: +15 LOC</span>
+                </div>
+                <div class="challenge-desc" id="challenge-desc">Carregando desafio...</div>
+                <div class="challenge-input-row">
+                    <input type="text" class="challenge-input" id="user-code-input" placeholder="Digite seu comando aqui (ex: let x = 10;) ...">
+                    <button class="action-button" style="width: 120px; margin-top:0;" onclick="validateChallengeCode()">Validar</button>
+                </div>
+            </div>
+
             <div class="editor-body">
-                <div class="line-numbers" id="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+                <div class="line-numbers" id="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8</div>
                 <div class="code-content" id="code-editor-area" contenteditable="false">
 // VS Code Dev Adventure: Cyberpunk Elite
-// Pressione F5 ou clique em Escrever Código para avançar
-function infiltrateOmniCorp() {
-    let firewallStatus = "Secure";
-    let exploitReady = true;
-    
-    if (exploitReady) {
-        console.log("Iniciando injeção de pacotes...");
-        bypassSecurityGrid();
-    }
+// Resolva o desafio acima para injetar código na OmniCorp!
+function bypassMainframe() {
+    console.log("Aguardando input validado...");
 }
                 </div>
             </div>
@@ -732,16 +756,15 @@ function infiltrateOmniCorp() {
     <div class="terminal-panel">
         <div class="terminal-header">
             <div class="terminal-tabs">
-                <span class="terminal-tab active">PROBLEMAS</span>
+                <span class="terminal-tab active">PROBLEMAS & FEEDBACK</span>
                 <span class="terminal-tab">SAÍDA</span>
                 <span class="terminal-tab">TERMINAL CYBERPUNK</span>
-                <span class="terminal-tab">PORTAS</span>
             </div>
             <span>zsh - omni@netrunner</span>
         </div>
         <div class="terminal-body" id="terminal-logs">
             [SYS_INIT] Conexão segura estabelecida com o cluster central.<br>
-            [TUTORIAL] Pressione <strong>F5</strong> ou clique em Escrever Código para começar a gerar LOC.
+            [TUTORIAL] Leia o desafio de código no topo do editor, digite a resposta correta e clique em Validar!
         </div>
     </div>
 
@@ -769,34 +792,78 @@ function infiltrateOmniCorp() {
             level: 1,
             credits: 10,
             titleIndex: 0,
+            currentChallengeIndex: 0,
             upgrades: {
                 prettier: { name: "Prettier Auto-Format", cost: 15, cps: 1, count: 0, desc: "Formata e programa linhas automaticamente." },
                 eslint: { name: "ESLint Guard", cost: 100, cps: 5, count: 0, desc: "Remove bugs lógicos e gera código em lote." },
-                copilot: { name: "GitHub Copilot vX", cost: 550, cps: 25, count: 0, desc: "IA quântica que escreve software sozinha." },
-                quantumServer: { name: "Quantum Rig Server", cost: 2500, cps: 120, count: 0, desc: "Cluster dedicado de alta performance." }
+                copilot: { name: "GitHub Copilot vX", cost: 550, cps: 25, count: 0, desc: "IA quântica que escreve software sozinha." }
             },
             techs: {
-                variables: { name: "1. Variáveis & Tipos", cost: 50, unlocked: false, desc: "Conceito básico de armazenamento de dados. Bônus +2 LOC/clique.", type: "logic" },
-                conditionals: { name: "2. Condicionais (if/else)", cost: 150, unlocked: false, desc: "Tomada de decisões no código. Bônus +5 LOC/clique.", type: "logic" },
-                loops: { name: "3. Loops (for/while)", cost: 400, unlocked: false, desc: "Automação de repetições. Dobra o ganho das Extensões.", type: "logic" },
-                firewall: { name: "4. Firewall Bypass", cost: 800, unlocked: false, desc: "Técnica de cibersegurança para infiltrar portas seguras.", type: "security" },
-                rsa: { name: "5. Criptografia RSA", cost: 2000, unlocked: false, desc: "Decodifica pacotes criptografados da OmniCorp.", type: "security" }
+                variables: { name: "1. Variáveis & Tipos", cost: 50, unlocked: false, desc: "Armazenamento de dados. +2 LOC/clique.", type: "logic" },
+                conditionals: { name: "2. Condicionais (if/else)", cost: 150, unlocked: false, desc: "Tomada de decisões. Dobra bônus.", type: "logic" },
+                loops: { name: "3. Loops (for/while)", cost: 400, unlocked: false, desc: "Automação de repetições.", type: "logic" }
             }
         };
 
-        const titles = [
-            "[Junior Hacker]", 
-            "[Script Kiddie]", 
-            "[Fullstack Mercenary]", 
-            "[Cyber Security Specialist]", 
-            "[Master Netrunner]", 
-            "[OmniCorp Destroyer]"
+        // LISTA DE DESAFIOS REAIS DE PROGRAMAÇÃO COM FEEDBACK DETALHADO
+        const challenges = [
+            {
+                id: 1,
+                title: "Criando Variáveis em JavaScript",
+                desc: "Declare uma variável chamada <code>target</code> que receba a string <code>'OmniCorp'</code> usando a palavra-chave <code>let</code>.",
+                reward: 20,
+                hint: "Sintaxe correta: let target = 'OmniCorp';",
+                validator: (input) => {
+                    let clean = input.replace(/\s+/g, '').toLowerCase();
+                    return clean.includes("lettarget='omnicorp'") || clean.includes('lettarget="omnicorp"') || clean === "lettarget='omnicorp';";
+                },
+                errorFeedback: "Erro de Sintaxe / Atribuição. Em JS, usamos 'let nome = valor;'. Verifique se usou as aspas simples ou duplas na string 'OmniCorp'."
+            },
+            {
+                id: 2,
+                title: "Trabalhando com Listas (Arrays)",
+                desc: "Crie uma lista (Array) chamada <code>servers</code> contendo três servidores IP em formato string: <code>'10.0.0.1'</code>, <code>'10.0.0.2'</code> e <code>'10.0.0.3'</code>.",
+                reward: 35,
+                hint: "Sintaxe correta: let servers = ['10.0.0.1', '10.0.0.2', '10.0.0.3'];",
+                validator: (input) => {
+                    let clean = input.replace(/\s+/g, '');
+                    return clean.includes("servers=['10.0.0.1','10.0.0.2','10.0.0.3']") || clean.includes('servers=["10.0.0.1","10.0.0.2","10.0.0.3"]');
+                },
+                errorFeedback: "Erro na Estrutura da Lista. Listas em JavaScript e Python usam colchetes `[...]` e os itens devem ser separados por vírgulas."
+            },
+            {
+                id: 3,
+                title: "Estruturas Condicionais (if / else)",
+                desc: "Escreva uma condicional simples que verifique se <code>acesso == true</code>. Caso seja, imprima no console <code>'Acesso Permitido'</code>.",
+                reward: 50,
+                hint: "Sintaxe correta: if (acesso == true) { console.log('Acesso Permitido'); }",
+                validator: (input) => {
+                    let clean = input.replace(/\s+/g, '').toLowerCase();
+                    return clean.includes("if(acessotrue)") || clean.includes("if(acesso==true)") || clean.includes("if(acesso===true)");
+                },
+                errorFeedback: "Erro na Condicional. A estrutura exige parênteses para a condição `if (condicao)` e chaves `{ ... }` para o bloco de código executado."
+            },
+            {
+                id: 4,
+                title: "Loops de Repetição (for)",
+                desc: "Escreva um loop <code>for</code> que repita 3 vezes, iniciando o contador <code>let i = 0</code> enquanto <code>i < 3</code>, incrementando <code>i++</code>.",
+                reward: 80,
+                hint: "Sintaxe correta: for (let i = 0; i < 3; i++) { }",
+                validator: (input) => {
+                    let clean = input.replace(/\s+/g, '').toLowerCase();
+                    return clean.includes("for(leti=0;i<3;i++)");
+                },
+                errorFeedback: "Erro no Loop For. A estrutura padrão possui 3 partes separadas por ponto e vírgula: inicialização, condição e incremento: `for (let i = 0; i < 3; i++)`."
+            }
         ];
+
+        const titles = ["[Junior Hacker]", "[Script Kiddie]", "[Fullstack Mercenary]", "[Cyber Security Specialist]", "[Master Netrunner]", "[OmniCorp Destroyer]"];
 
         // FUNÇÕES DE INTERFACE E MODAIS
         function closeBriefing() {
             document.getElementById('briefing-modal').style.display = 'none';
-            addLog("Missão iniciada. O destino da rede está em suas mãos.", "success");
+            loadCurrentChallenge();
+            addLog("Missão iniciada. Resolva os desafios de código para avançar.", "success");
         }
 
         function toggleModal(modalId, show) {
@@ -822,7 +889,6 @@ function infiltrateOmniCorp() {
             addLog(`Tema alterado para: ${themes[currentThemeIndex]}`, "info");
         }
 
-        // REGISTRO DE LOGS NO TERMINAL
         function addLog(msg, type = "info") {
             const term = document.getElementById('terminal-logs');
             let cssClass = "";
@@ -834,37 +900,65 @@ function infiltrateOmniCorp() {
             term.scrollTop = term.scrollHeight;
         }
 
-        // MECÂNICA DE CÓDIGO
-        function getClickPower() {
-            let power = 1;
-            if (game.techs.variables.unlocked) power += 2;
-            if (game.techs.conditionals.unlocked) power += 5;
-            return power;
+        // CARREGAR E VALIDAR DESAFIO DE CÓDIGO
+        function loadCurrentChallenge() {
+            let ch = challenges[game.currentChallengeIndex % challenges.length];
+            document.getElementById('challenge-num').innerText = ch.id;
+            document.getElementById('challenge-desc').innerHTML = ch.desc;
+            document.getElementById('challenge-reward').innerText = `Recompensa: +${ch.reward} LOC`;
+            document.getElementById('user-code-input').value = "";
+        }
+
+        function validateChallengeCode() {
+            let inputVal = document.getElementById('user-code-input').value;
+            let ch = challenges[game.currentChallengeIndex % challenges.length];
+
+            if (!inputVal.trim()) {
+                addLog("O campo de código está vazio. Digite sua solução antes de validar.", "warn");
+                return;
+            }
+
+            let isCorrect = ch.validator(inputVal);
+
+            if (isCorrect) {
+                game.loc += ch.reward;
+                game.xp += 15;
+                addLog(`[SUCESSO] Desafio #${ch.id} concluído! +${ch.reward} LOC e +15 XP ganhos.`, "success");
+                checkLevelUp();
+                
+                // Avança para o próximo desafio
+                game.currentChallengeIndex++;
+                loadCurrentChallenge();
+                updateUI();
+            } else {
+                addLog(`[ERRO DE COMPILAÇÃO] Falha no Desafio #${ch.id}.`, "error");
+                addLog(`Dica de Correção: ${ch.hint}`, "warn");
+                addLog(`Análise Educacional: ${ch.errorFeedback}`, "error");
+            }
         }
 
         function writeCodeManual() {
-            let power = getClickPower();
-            game.loc += power;
+            game.loc += 1;
             game.xp += 1;
             checkLevelUp();
             updateUI();
         }
 
         function checkLevelUp() {
-            let requiredXp = game.level * 30;
+            let requiredXp = game.level * 40;
             if (game.xp >= requiredXp) {
                 game.level++;
-                game.credits += 15;
+                game.credits += 20;
                 if (game.level % 2 === 0 && game.titleIndex < titles.length - 1) {
                     game.titleIndex++;
                     document.getElementById('player-title-display').innerText = titles[game.titleIndex];
                     addLog(`PARABÉNS! Novo título alcançado: ${titles[game.titleIndex]}`, "success");
                 }
-                addLog(`Subiu para o Nível ${game.level}! +15 Créditos Corporativos.`, "success");
+                addLog(`Subiu para o Nível ${game.level}! +20 Créditos Corporativos.`, "success");
             }
         }
 
-        // COMPRA DE EXTENSÕES
+        // EXTENSÕES E TECH TREE
         function renderExtensions() {
             const list = document.getElementById('extensions-list');
             list.innerHTML = "";
@@ -896,7 +990,6 @@ function infiltrateOmniCorp() {
             }
         }
 
-        // TECH TREE (EDUCAÇÃO)
         function renderTechTree() {
             const list = document.getElementById('tech-list');
             list.innerHTML = "";
@@ -927,15 +1020,15 @@ function infiltrateOmniCorp() {
             if (!tech.unlocked && game.loc >= tech.cost) {
                 game.loc -= tech.cost;
                 tech.unlocked = true;
-                addLog(`Tecnologia dominada: ${tech.name}! Conhecimento aplicado na rede.`, "success");
+                addLog(`Tecnologia dominada: ${tech.name}!`, "success");
                 renderTechTree();
                 updateUI();
             } else if (!tech.unlocked) {
-                addLog(`Linhas de Código insuficientes para pesquisar ${tech.name}.`, "warn");
+                addLog(`LOC insuficientes para pesquisar ${tech.name}.`, "warn");
             }
         }
 
-        // MINI-GAME DE INVASÃO (TRACEROUTE)
+        // MINI-GAME TRACEROUTE
         let tracerouteActive = false;
         let targetSequence = [];
         let playerSequence = [];
@@ -946,7 +1039,7 @@ function infiltrateOmniCorp() {
             playerSequence = [];
             
             let area = document.getElementById('traceroute-area');
-            let html = `<p style="font-size:11px; color:var(--accent-blue); margin-bottom:5px;">Sequência Alvo Ativa. Clique nos nós em ordem:</p>`;
+            let html = `<p style="font-size:11px; color:var(--accent-blue); margin-bottom:5px;">Clique nos nós na ordem correta:</p>`;
             html += `<div class="traceroute-grid">`;
             for (let i = 0; i < 6; i++) {
                 html += `<div class="node-btn" id="node-${i}" onclick="clickNode(${i})">Nó 0${i+1}</div>`;
@@ -966,7 +1059,7 @@ function infiltrateOmniCorp() {
                 btn.classList.add('connected');
                 if (playerSequence.length === targetSequence.length) {
                     tracerouteActive = false;
-                    let reward = game.level * 25;
+                    let reward = game.level * 30;
                     game.credits += reward;
                     addLog(`Invasão bem-sucedida! Servidor violado. +${reward} Créditos!`, "success");
                     document.getElementById('traceroute-area').innerHTML = `<p style="color:var(--accent-color); font-size:12px; margin-top:10px;"><i class="fa-solid fa-check-circle"></i> Invasão Concluída com Sucesso!</p>`;
@@ -975,16 +1068,15 @@ function infiltrateOmniCorp() {
             } else {
                 btn.classList.add('blocked');
                 tracerouteActive = false;
-                addLog("Firewall ativado! Sequência incorreta. Invasão bloqueada.", "error");
-                document.getElementById('traceroute-area').innerHTML = `<p style="color:var(--danger-color); font-size:12px; margin-top:10px;"><i class="fa-solid fa-triangle-exclamation"></i> Alarme Disparado! Tente novamente.</p>`;
+                addLog("Firewall ativado! Sequência incorreta.", "error");
+                document.getElementById('traceroute-area').innerHTML = `<p style="color:var(--danger-color); font-size:12px; margin-top:10px;"><i class="fa-solid fa-triangle-exclamation"></i> Alarme Disparado!</p>`;
             }
         }
 
-        // ATUALIZAÇÃO DA INTERFACE (UI)
         function updateUI() {
             document.getElementById('loc-count').innerText = Math.floor(game.loc);
             document.getElementById('cps-count').innerText = game.cps;
-            document.getElementById('xp-count').innerText = game.xp;
+            document.getElementById('xp-count').innerText = Math.floor(game.xp);
             document.getElementById('level-count').innerText = game.level;
             document.getElementById('credits-count').innerText = game.credits;
 
@@ -992,20 +1084,19 @@ function infiltrateOmniCorp() {
             renderTechTree();
         }
 
-        // LOOP PRINCIPAL DE CPS (IDLE)
+        // LOOP PRINCIPAL DE CPS
         setInterval(() => {
             if (game.cps > 0) {
-                let multiplier = game.techs.loops.unlocked ? 2 : 1;
-                game.loc += (game.cps * multiplier) / 10;
-                game.xp += 0.1 * multiplier;
+                game.loc += game.cps / 10;
+                game.xp += 0.1;
                 checkLevelUp();
                 updateUI();
             }
         }, 100);
 
-        // ATALHOS DE TECLADO (F5 ou Espaço escreve código)
+        // ATALHOS
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'F5' || e.code === 'Space') {
+            if (e.key === 'F5') {
                 e.preventDefault();
                 writeCodeManual();
             }
