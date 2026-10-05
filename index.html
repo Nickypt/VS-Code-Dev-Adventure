@@ -12,16 +12,47 @@
 </head>
 <body data-theme="cyberpunk">
 
-    <!-- MODAL DE BRIEFING / HISTÓRIA COMPLEXA -->
+    <!-- MODAL DE EVENTO ALEATÓRIO (CYBER BREACH) -->
+    <div class="modal-overlay" id="event-modal" style="display: none;">
+        <div class="modal-box" id="event-modal-box" style="border-color: var(--danger-color);">
+            <div class="modal-title" id="event-title">
+                <i class="fa-solid fa-triangle-exclamation"></i> ALERTA DE BREACH DE SEGURANÇA
+            </div>
+            <div class="modal-body" id="event-desc">
+                Um ICE corporativo está rastreando seu IP! Responda à contramedida antes que o tempo esgote.
+            </div>
+            <div class="modal-footer" id="event-footer">
+                <!-- Preenchido via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE EXPORTAR / IMPORTAR SAVE -->
+    <div class="modal-overlay" id="save-modal" style="display: none;">
+        <div class="modal-box">
+            <div class="modal-title">
+                <i class="fa-solid fa-floppy-disk"></i> Gerenciador de Save Quântico
+            </div>
+            <div class="modal-body">
+                <p>Copie o código do seu save abaixo para fazer backup ou cole um save antigo para restaurar:</p>
+                <textarea id="save-textarea" style="width: 100%; height: 120px; background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px; font-family: 'Fira Code', monospace; font-size: 11px;"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="action-button" onclick="importSaveData()" style="width: auto; padding: 8px 15px; background: var(--accent-purple);">IMPORTAR SAVE</button>
+                <button class="action-button" onclick="toggleModal('save-modal', false)" style="width: auto; padding: 8px 15px;">FECHAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE BRIEFING / HISTÓRIA -->
     <div class="modal-overlay" id="briefing-modal">
         <div class="modal-box">
             <div class="modal-title">
                 <i class="fa-solid fa-brain"></i> OPERAÇÃO ORACLE: A CONSPIRAÇÃO OMNICORP
             </div>
             <div class="modal-body">
-                <p>Ano 2088. A megacorporação <strong>OmniCorp</strong> monopolizou a economia global e desenvolveu a <strong>IA Oracle</strong> — uma inteligência artificial quântica projetada para absorver e digitalizar a consciência humana através da rede.</p>
-                <p>Você é um Netrunner de elite recrutado pela célula rebelde <em>The Resistance</em>. O seu objetivo é invadir os nós centrais da megacorporação resolvendo desafios de código e derrotando chefes de firewall.</p>
-                <p><strong>Nova Diretriz de Sobrecarga Térmica:</strong> O spam excessivo de cliques causa superaquecimento. Utilize extensões, Daemons de IA e desafios lógicos para progredir de forma estratégica!</p>
+                <p>Ano 2088. A megacorporação <strong>OmniCorp</strong> monopolizou a economia global e desenvolveu a <strong>IA Oracle</strong>.</p>
+                <p>Gerencie múltiplos arquivos no explorador, evite breaches de segurança aleatórios e salve seu progresso na nuvem local!</p>
             </div>
             <div class="modal-footer">
                 <button class="action-button" onclick="closeBriefing()" style="width: auto; padding: 8px 20px;">INICIAR INFILTRAÇÃO <i class="fa-solid fa-arrow-right"></i></button>
@@ -33,14 +64,17 @@
     <div class="modal-overlay" id="help-modal" style="display: none;">
         <div class="modal-box">
             <div class="modal-title">
-                <i class="fa-solid fa-circle-question"></i> Guia do Netrunner (Ajuda)
+                <i class="fa-solid fa-circle-question"></i> Guia do Netrunner & Atalhos
             </div>
             <div class="modal-body">
-                <p><strong>Editor & Desafios:</strong> Resolva os problemas de programação para ganhar recompensas massivas de LOC.</p>
-                <p><strong>Sobrecarga Térmica:</strong> Clicar repetidamente gera calor. Se atingir 100%, o terminal entra em *Throttling*.</p>
-                <p><strong>Daemons (🤖):</strong> Companheiros autônomos que geram recursos passivos.</p>
-                <p><strong>Batalha de Chefe (⚔️):</strong> Enfrente o Diretor AI-Vanguard digitando comandos de defesa contra DDoS.</p>
-                <p><strong>Terminal CLI (💻):</strong> Digite comandos reais no rodapé (`help`, `ls`, `cat`, `hack`, `connect`).</p>
+                <p><strong>Atalhos de Teclado Globais:</strong></p>
+                <ul>
+                    <li><code>F5</code>: Escrever Código Manual</li>
+                    <li><code>Ctrl + B</code>: Alternar Barra Lateral</li>
+                    <li><code>Ctrl + ~</code>: Focar no Terminal CLI Inferior</li>
+                    <li><code>Ctrl + Enter</code>: Injetar o Desafio de Código</li>
+                </ul>
+                <p><strong>Múltiplos Arquivos:</strong> Alterne entre arquivos no explorador para ganhar bônus especializados (LOC, Créditos ou XP).</p>
             </div>
             <div class="modal-footer">
                 <button class="action-button" onclick="toggleModal('help-modal', false)" style="width: auto; padding: 8px 20px;">FECHAR GUIA</button>
@@ -48,7 +82,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE FINAL ALTERNATIVO (CINEMATOGRÁFICO) -->
+    <!-- MODAL DE FINAL ALTERNATIVO -->
     <div class="modal-overlay" id="ending-modal" style="display: none;">
         <div class="modal-box" style="border-color: var(--accent-blue);">
             <div class="modal-title" id="ending-title">
@@ -69,32 +103,34 @@
                 <div class="dot yellow"></div>
                 <div class="dot green"></div>
             </div>
-            <span>omni_oracle_core.js - VS Code Dev Adventure</span>
+            <span id="window-title-file">omni_oracle_core.js - VS Code Dev Adventure</span>
         </div>
         <div class="titlebar-center">
             <span id="player-title-display">[Junior Hacker]</span>
         </div>
         <div class="titlebar-right">
+            <button class="top-btn" onclick="openSaveManager()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
             <button class="top-btn" onclick="toggleTheme()"><i class="fa-solid fa-palette"></i> Tema</button>
             <button class="top-btn" onclick="toggleModal('help-modal', true)"><i class="fa-solid fa-question"></i> Ajuda</button>
         </div>
     </div>
 
-    <!-- TICKER DE NOTÍCIAS DO SUBMUNDO (CYBERNET NEWS) -->
+    <!-- TICKER DE NOTÍCIAS DO SUBMUNDO -->
     <div class="news-ticker">
         <div class="news-ticker-label"><i class="fa-solid fa-rss"></i> CYBERNET FEED:</div>
         <div class="news-ticker-content" id="news-ticker-text">Conexão segura estabelecida com a rede rebelde. Aguardando movimentação de Netrunner...</div>
     </div>
 
     <!-- LAYOUT PRINCIPAL -->
-    <div class="main-layout">
+    <div class="main-layout" id="main-layout">
 
         <!-- BARRA DE ATIVIDADES -->
         <div class="activity-bar">
             <div class="activity-icons">
-                <div class="activity-icon active" onclick="switchSidebar('explorer')" title="Explorador / Status"><i class="fa-regular fa-folder-open"></i></div>
+                <div class="activity-icon active" onclick="switchSidebar('explorer')" title="Explorador de Arquivos [Ctrl+B]"><i class="fa-regular fa-folder-open"></i></div>
                 <div class="activity-icon" onclick="switchSidebar('extensions')" title="Extensões & Automação"><i class="fa-solid fa-puzzle-piece"></i></div>
                 <div class="activity-icon" onclick="switchSidebar('daemons')" title="Daemons & Companheiros IA"><i class="fa-solid fa-robot"></i></div>
+                <div class="activity-icon" onclick="switchSidebar('achievements')" title="Conquistas & Troféus (🏆)"><i class="fa-solid fa-trophy"></i></div>
                 <div class="activity-icon" onclick="switchSidebar('boss')" title="Batalha de Chefe (Firewall)"><i class="fa-solid fa-shield-halved"></i></div>
                 <div class="activity-icon" onclick="switchSidebar('techtree')" title="Tech Tree & Educação"><i class="fa-solid fa-graduation-cap"></i></div>
             </div>
@@ -104,15 +140,45 @@
         </div>
 
         <!-- BARRA LATERAL -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar-panel">
             <div class="sidebar-header">
                 <span id="sidebar-title">Explorador</span>
                 <i class="fa-solid fa-ellipsis-vertical"></i>
             </div>
             <div class="sidebar-content">
 
-                <!-- PAINEL EXPLORADOR / STATUS -->
+                <!-- PAINEL EXPLORADOR / ÁRVORE DE ARQUIVOS -->
                 <div id="panel-explorer" class="panel-view active">
+                    <div class="sidebar-section">
+                        <h4><i class="fa-solid fa-folder-tree"></i> Workspace: /omni_core</h4>
+                        <div class="file-tree-node folder" onclick="toggleFolder('folder-src')">
+                            <i class="fa-solid fa-folder-open" id="icon-folder-src"></i> src/
+                        </div>
+                        <div class="file-tree-sub" id="folder-src">
+                            <div class="file-tree-node file active-file" onclick="switchOpenFile('main.js')" id="file-main.js">
+                                <i class="fa-brands fa-js" style="color: #f1fa8c;"></i> main.js <span style="font-size:9px; color:var(--accent-color);">(LOC)</span>
+                            </div>
+                        </div>
+
+                        <div class="file-tree-node folder" onclick="toggleFolder('folder-net')" style="margin-top: 5px;">
+                            <i class="fa-solid fa-folder-open" id="icon-folder-net"></i> net/
+                        </div>
+                        <div class="file-tree-sub" id="folder-net">
+                            <div class="file-tree-node file" onclick="switchOpenFile('firewall.json')" id="file-firewall.json">
+                                <i class="fa-solid fa-file-code" style="color: #8be9fd;"></i> firewall.json <span style="font-size:9px; color:var(--warning-color);">(Créditos)</span>
+                            </div>
+                        </div>
+
+                        <div class="file-tree-node folder" onclick="toggleFolder('folder-db')" style="margin-top: 5px;">
+                            <i class="fa-solid fa-folder-open" id="icon-folder-db"></i> db/
+                        </div>
+                        <div class="file-tree-sub" id="folder-db">
+                            <div class="file-tree-node file" onclick="switchOpenFile('database.sql')" id="file-database.sql">
+                                <i class="fa-solid fa-database" style="color: #bd93f9;"></i> database.sql <span style="font-size:9px; color:var(--accent-purple);">(XP)</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="stat-card">
                         <div class="label">Linhas de Código (LOC)</div>
                         <div class="value" id="loc-count">0</div>
@@ -150,8 +216,15 @@
                 <div id="panel-daemons" class="panel-view">
                     <div class="sidebar-section">
                         <h4><i class="fa-solid fa-microchip"></i> Daemons Assistentes IA</h4>
-                        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Recrute inteligências autônomas para minerar dados e acelerar sua evolução.</p>
                         <div id="daemons-list"></div>
+                    </div>
+                </div>
+
+                <!-- PAINEL CONQUISTAS -->
+                <div id="panel-achievements" class="panel-view">
+                    <div class="sidebar-section">
+                        <h4><i class="fa-solid fa-trophy"></i> Troféus & Conquistas</h4>
+                        <div id="achievements-list"></div>
                     </div>
                 </div>
 
@@ -159,7 +232,6 @@
                 <div id="panel-boss" class="panel-view">
                     <div class="sidebar-section">
                         <h4><i class="fa-solid fa-skull"></i> Firewall AI-Vanguard</h4>
-                        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Derrote o chefe corporativo digitando comandos de defesa antes que o tempo esgote.</p>
                         <div id="boss-container">
                             <div class="stat-card" style="margin-bottom: 10px;">
                                 <div class="label">HP do Chefe</div>
@@ -185,18 +257,22 @@
             </div>
         </div>
 
-        <!-- EDITOR DE CÓDIGO COM DESAFIOS E RECOMPENSAS MASSIVAS -->
-        <div class="editor-container">
-            <div class="editor-tabs">
-                <div class="tab active"><i class="fa-brands fa-js" style="color: #f1fa8c;"></i> oracle_exploit.js</div>
-                <div class="tab"><i class="fa-brands fa-python" style="color: #8be9fd;"></i> firewall_breaker.py</div>
+        <!-- EDITOR DE CÓDIGO COM CHUVA MATRIX E DESAFIOS -->
+        <div class="editor-container" id="editor-container-main">
+            <!-- CANVAS MATRIX CODE RAIN -->
+            <canvas id="matrix-canvas"></canvas>
+
+            <div class="editor-tabs" id="editor-tabs-bar">
+                <div class="tab active" onclick="switchOpenFile('main.js')" id="tab-main.js"><i class="fa-brands fa-js" style="color: #f1fa8c;"></i> main.js</div>
+                <div class="tab" onclick="switchOpenFile('firewall.json')" id="tab-firewall.json"><i class="fa-solid fa-file-code" style="color: #8be9fd;"></i> firewall.json</div>
+                <div class="tab" onclick="switchOpenFile('database.sql')" id="tab-database.sql"><i class="fa-solid fa-database" style="color: #bd93f9;"></i> database.sql</div>
             </div>
 
             <!-- PAINEL DE DESAFIO ATIVO -->
             <div class="challenge-box" id="challenge-box">
                 <div class="challenge-title">
-                    <span><i class="fa-solid fa-terminal"></i> DESAFIO DA IA ORACLE #<span id="challenge-num">1</span></span>
-                    <span style="font-size: 11px; color: var(--warning-color);" id="challenge-reward">Recompensa Massiva: +250 LOC</span>
+                    <span><i class="fa-solid fa-terminal"></i> DESAFIO DA IA ORACLE #<span id="challenge-num">1</span> <span style="font-size: 10px; color: var(--text-muted);">(Ctrl+Enter)</span></span>
+                    <span style="font-size: 11px; color: var(--warning-color);" id="challenge-reward">Recompensa: +250 LOC</span>
                 </div>
                 <div class="challenge-desc" id="challenge-desc">Carregando desafio...</div>
                 <div class="challenge-input-row">
@@ -209,7 +285,7 @@
                 <div class="line-numbers" id="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8</div>
                 <div class="code-content" id="code-editor-area" contenteditable="false">
 // VS Code Dev Adventure: Cyberpunk Elite
-// Injeção de código quântico contra a OmniCorp
+// Arquivo ativo: /src/main.js
 function bypassOracleNeuralNet() {
     let connectionSecure = true;
     if (connectionSecure) {
@@ -228,11 +304,11 @@ function bypassOracleNeuralNet() {
             <div class="terminal-tabs">
                 <span class="terminal-tab active">PROBLEMAS & LOGS DO ORACLE</span>
             </div>
-            <span>zsh - omni@netrunner</span>
+            <span>zsh - omni@netrunner [Ctrl+~ para focar]</span>
         </div>
         <div class="terminal-body" id="terminal-logs">
             [SYS_INIT] Conexão segura estabelecida com o cluster central.<br>
-            [NARRATIVE] A IA Oracle monitora seus keystrokes. Use o terminal CLI abaixo (`help` para comandos).
+            [NARRATIVE] O sistema realiza autosave a cada 10 segundos. Use `help` no CLI.
         </div>
         <!-- PROMPT CLI INTERATIVO -->
         <div class="terminal-cli-bar">
@@ -250,7 +326,7 @@ function bypassOracleNeuralNet() {
         </div>
         <div class="statusbar-right">
             <span>UTF-8</span>
-            <span>JavaScript</span>
+            <span id="statusbar-file-type">JavaScript</span>
             <span><i class="fa-solid fa-bell"></i> OmniGuard: Online</span>
         </div>
     </div>
@@ -268,6 +344,9 @@ function bypassOracleNeuralNet() {
             titleIndex: 0,
             currentChallengeIndex: 0,
             challengesCompleted: 0,
+            manualClicks: 0,
+            bossesDefeated: 0,
+            currentFile: 'main.js',
             upgrades: {
                 prettier: { name: "Prettier Neural-Format", cost: 50, cps: 5, count: 0, desc: "Formata e programa linhas automaticamente." },
                 eslint: { name: "ESLint Cyber-Guard", cost: 300, cps: 25, count: 0, desc: "Remove bugs lógicos e gera código quântico." },
@@ -278,11 +357,38 @@ function bypassOracleNeuralNet() {
                 daemonK: { name: "Daemon-K", cost: 800, cps: 70, count: 0, desc: "Minerador de dados corporativos. +70 CPS." },
                 overclock: { name: "Overclock-AI", cost: 3000, cps: 250, count: 0, desc: "Inteligência de pico de clock. +250 CPS." }
             },
+            achievements: {
+                firstCode: { name: "Script Kiddie", desc: "Escreva 10 linhas manualmente.", target: 10, current: 0, unlocked: false, reward: 50 },
+                codeMaster: { name: "Netrunner Supremo", desc: "Conclua 5 desafios da IA Oracle.", target: 5, current: 0, unlocked: false, reward: 200 },
+                pyro: { name: "Pyromaniac", desc: "Atinga 80% ou mais de superaquecimento.", target: 1, current: 0, unlocked: false, reward: 100 },
+                bossSlayer: { name: "Caçador de Firewalls", desc: "Derrote o Diretor AI-Vanguard 1 vez.", target: 1, current: 0, unlocked: false, reward: 300 }
+            },
             techs: {
                 variables: { name: "1. Variáveis & Tipos", cost: 150, unlocked: false, desc: "Armazenamento quântico. +10 LOC/clique.", type: "logic" },
                 conditionals: { name: "2. Condicionais (if/else)", cost: 500, unlocked: false, desc: "Tomada de decisões em rede.", type: "logic" },
                 loops: { name: "3. Loops (for/while)", cost: 1500, unlocked: false, desc: "Automação total de rotinas.", type: "logic" },
                 firewallBypass: { name: "4. Neural Firewall Bypass", cost: 4000, unlocked: false, desc: "Permite acessar o núcleo da IA Oracle.", type: "security" }
+            }
+        };
+
+        const fileContents = {
+            'main.js': {
+                name: 'main.js',
+                title: 'omni_oracle_core.js - VS Code Dev Adventure',
+                type: 'JavaScript',
+                content: `// Módulo Principal: /src/main.js\n// Focado em geração de Linhas de Código (LOC)\nfunction bypassOracleNeuralNet() {\n    let connectionSecure = true;\n    if (connectionSecure) {\n        execExploitPayload();\n    }\n}`
+            },
+            'firewall.json': {
+                name: 'firewall.json',
+                title: 'firewall_config.json - OmniCorp Network',
+                type: 'JSON',
+                content: `{\n  "target": "Oracle_Core",\n  "encryption": "AES-4096-Quantum",\n  "status": "Vulnerable",\n  "routing_nodes": [\n    "192.168.1.10",\n    "10.0.0.5"\n  ]\n}`
+            },
+            'database.sql': {
+                name: 'database.sql',
+                title: 'database_dump.sql - OmniCorp Records',
+                type: 'SQL',
+                content: `-- Dump de Registros da Consciência Humana\nSELECT subject_id, consciousness_status\nFROM neural_vault\nWHERE corporation = 'OmniCorp'\nORDER BY upload_date DESC;`
             }
         };
 
@@ -296,8 +402,7 @@ function bypassOracleNeuralNet() {
                 validator: (input) => {
                     let clean = input.replace(/\s+/g, '').toLowerCase();
                     return clean.includes("lettoken='omni_key_99'") || clean.includes('lettoken="omni_key_99"');
-                },
-                errorFeedback: "Erro de atribuição. Lembre-se da estrutura: `let nome = 'valor';`"
+                }
             },
             {
                 id: 2,
@@ -308,8 +413,7 @@ function bypassOracleNeuralNet() {
                 validator: (input) => {
                     let clean = input.replace(/\s+/g, '');
                     return clean.includes("nodes=['192.168.1.10','10.0.0.5']") || clean.includes('nodes=["192.168.1.10","10.0.0.5"]');
-                },
-                errorFeedback: "Erro na lista. Arrays usam colchetes `[...]`."
+                }
             },
             {
                 id: 3,
@@ -320,8 +424,7 @@ function bypassOracleNeuralNet() {
                 validator: (input) => {
                     let clean = input.replace(/\s+/g, '').toLowerCase();
                     return clean.includes("if(authtrue)") || clean.includes("if(auth===true)") || clean.includes("if(auth==true)");
-                },
-                errorFeedback: "Erro na condicional. Formato correto: `if (condicao) { acao(); }`."
+                }
             },
             {
                 id: 4,
@@ -332,8 +435,7 @@ function bypassOracleNeuralNet() {
                 validator: (input) => {
                     let clean = input.replace(/\s+/g, '').toLowerCase();
                     return clean.includes("for(leti=0;i<5;i++)");
-                },
-                errorFeedback: "Erro no loop for."
+                }
             }
         ];
 
@@ -354,6 +456,37 @@ function bypassOracleNeuralNet() {
             document.getElementById(modalId).style.display = show ? 'flex' : 'none';
         }
 
+        function toggleFolder(folderId) {
+            let el = document.getElementById(folderId);
+            let icon = document.getElementById('icon-' + folderId);
+            if (el.style.display === 'none') {
+                el.style.display = 'block';
+                icon.className = "fa-solid fa-folder-open";
+            } else {
+                el.style.display = 'none';
+                icon.className = "fa-solid fa-folder";
+            }
+        }
+
+        function switchOpenFile(fileName) {
+            game.currentFile = fileName;
+            let fileObj = fileContents[fileName];
+            
+            document.getElementById('window-title-file').innerText = fileObj.title;
+            document.getElementById('code-editor-area').innerText = fileObj.content;
+            document.getElementById('statusbar-file-type').innerText = fileObj.type;
+
+            document.querySelectorAll('.file-tree-node.file').forEach(el => el.classList.remove('active-file'));
+            document.querySelectorAll('.editor-tabs .tab').forEach(el => el.classList.remove('active'));
+
+            let treeNode = document.getElementById('file-' + fileName);
+            let tabNode = document.getElementById('tab-' + fileName);
+            if (treeNode) treeNode.classList.add('active-file');
+            if (tabNode) tabNode.classList.add('active');
+
+            addLog(`Arquivo aberto: /${fileName}`, "info");
+        }
+
         function switchSidebar(viewId) {
             document.querySelectorAll('.activity-icon').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.panel-view').forEach(el => el.classList.remove('active'));
@@ -361,7 +494,7 @@ function bypassOracleNeuralNet() {
             event.currentTarget.classList.add('active');
             document.getElementById('panel-' + viewId).classList.add('active');
 
-            const titlesMap = { explorer: "Explorador", extensions: "Extensões", daemons: "Daemons IA", boss: "Batalha de Chefe", techtree: "Tech Tree" };
+            const titlesMap = { explorer: "Explorador", extensions: "Extensões", daemons: "Daemons IA", achievements: "Conquistas", boss: "Batalha de Chefe", techtree: "Tech Tree" };
             document.getElementById('sidebar-title').innerText = titlesMap[viewId];
         }
 
@@ -380,7 +513,7 @@ function bypassOracleNeuralNet() {
             if (type === "error") cssClass = "log-error";
             if (type === "warn") cssClass = "log-warn";
             
-            term.innerHTML += `<br><span class="${cssClass}">[${new Date().toLocaleTimeString()}] ${msg}</span>`;
+            term.innerHTML += `<br><span class="${cssClass}">[${new Date().toLocaleTimeString()}]${msg}</span>`;
             term.scrollTop = term.scrollHeight;
         }
 
@@ -388,7 +521,7 @@ function bypassOracleNeuralNet() {
             let ch = challenges[game.currentChallengeIndex % challenges.length];
             document.getElementById('challenge-num').innerText = ch.id + (Math.floor(game.currentChallengeIndex / challenges.length) * 4);
             document.getElementById('challenge-desc').innerHTML = ch.desc;
-            document.getElementById('challenge-reward').innerText = `Recompensa Massiva: +${ch.reward} LOC`;
+            document.getElementById('challenge-reward').innerText = `Recompensa: +${ch.reward} LOC`;
             document.getElementById('user-code-input').value = "";
         }
 
@@ -410,11 +543,11 @@ function bypassOracleNeuralNet() {
                 
                 game.currentChallengeIndex++;
                 loadCurrentChallenge();
+                checkAchievements();
                 updateUI();
                 updateNews(`Netrunner concluiu desafio #${ch.id}. A OmniCorp reforça os firewalls.`);
             } else {
-                addLog(`[ALERTA ORACLE] Falha na injeção.`, "error");
-                addLog(`Dica: ${ch.hint}`, "warn");
+                addLog(`[ALERTA ORACLE] Falha na injeção. Dica: ${ch.hint}`, "error");
             }
         }
 
@@ -425,13 +558,21 @@ function bypassOracleNeuralNet() {
             }
 
             game.heat += 12;
+            game.manualClicks++;
+            if (game.heat >= 80) {
+                document.getElementById('editor-container-main').classList.add('glitch-active');
+                game.achievements.pyro.current = 1;
+                checkAchievements();
+            }
+
             if (game.heat >= 100) {
                 game.heat = 100;
                 game.throttled = true;
-                addLog("SUPERACECIMENTO! Terminal bloqueado por 5 segundos.", "error");
+                addLog("SUPERACECIMENTO CRÍTICO! Terminal bloqueado por 5 segundos.", "error");
                 setTimeout(() => {
                     game.throttled = false;
                     game.heat = 0;
+                    document.getElementById('editor-container-main').classList.remove('glitch-active');
                     addLog("Termopar resfriado. Terminal liberado.", "success");
                     updateUI();
                 }, 5000);
@@ -439,9 +580,19 @@ function bypassOracleNeuralNet() {
 
             let power = 1;
             if (game.techs.variables.unlocked) power += 10;
-            game.loc += power;
+
+            // Bônus especializado baseado no arquivo aberto
+            if (game.currentFile === 'main.js') {
+                game.loc += power;
+            } else if (game.currentFile === 'firewall.json') {
+                game.credits += power * 2;
+            } else if (game.currentFile === 'database.sql') {
+                game.xp += power * 1.5;
+            }
+
             game.xp += 1.5;
             checkLevelUp();
+            checkAchievements();
             updateUI();
         }
 
@@ -457,6 +608,124 @@ function bypassOracleNeuralNet() {
                     updateNews(`URGENTE: Netrunner ascende ao cargo de ${titles[game.titleIndex]}!`);
                 }
                 addLog(`Subiu para o Nível ${game.level}! +75 Créditos.`, "success");
+            }
+        }
+
+        // SISTEMA DE EVENTOS ALEATÓRIOS (CYBER BREACHES)
+        function triggerRandomEvent() {
+            let eventType = Math.random() > 0.5 ? 'ice_breach' : 'underground_deal';
+            let modal = document.getElementById('event-modal');
+            let title = document.getElementById('event-title');
+            let desc = document.getElementById('event-desc');
+            let footer = document.getElementById('event-footer');
+
+            modal.style.display = 'flex';
+
+            if (eventType === 'ice_breach') {
+                title.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--danger-color);"></i> ALERTA: RASTREAMENTO ICE ATIVADO`;
+                desc.innerHTML = `Um agente ICE da OmniCorp está localizando sua sub-rede! Escolha uma contramedida rápida ou perca 30% dos seus créditos atuais.`;
+                footer.innerHTML = `
+                    <button class="action-button" onclick="resolveEvent('ice_success')" style="background: var(--accent-color);">DESCONECTAR IP (-$20)</button>
+                    <button class="action-button" onclick="resolveEvent('ice_fail')" style="background: var(--danger-color);">IGNORAR</button>
+                `;
+            } else {
+                title.innerHTML = `<i class="fa-solid fa-handshake" style="color: var(--accent-blue);"></i> PROPOSTA DE HACK UNDERGROUND`;
+                desc.innerHTML = `Um coletivo rebelde oferece um contrato de injeção rápida de dados em troca de créditos extras.`;
+                footer.innerHTML = `
+                    <button class="action-button" onclick="resolveEvent('deal_success')" style="background: var(--accent-blue); color:#000;">ACEITAR CONTRATO (+$150)</button>
+                    <button class="action-button" onclick="resolveEvent('deal_ignore')">RECUSAR</button>
+                `;
+            }
+        }
+
+        function resolveEvent(action) {
+            let modal = document.getElementById('event-modal');
+            modal.style.display = 'none';
+
+            if (action === 'ice_success') {
+                game.credits = Math.max(0, game.credits - 20);
+                addLog("IP desconectado com sucesso. Você escapou do ICE por pouco.", "warn");
+            } else if (action === 'ice_fail') {
+                let lost = Math.floor(game.credits * 0.3);
+                game.credits = Math.max(0, game.credits - lost);
+                addLog(`Rastreamento bem-sucedido pelo ICE! Você perdeu $${lost} créditos.`, "error");
+            } else if (action === 'deal_success') {
+                game.credits += 150;
+                addLog("Contrato rebelde cumprido! +$150 créditos recebidos.", "success");
+            } else {
+                addLog("Proposta underground recusada.", "info");
+            }
+            updateUI();
+        }
+
+        // SISTEMA DE CONQUISTAS
+        function checkAchievements() {
+            game.achievements.firstCode.current = game.manualClicks;
+            game.achievements.codeMaster.current = game.challengesCompleted;
+            game.achievements.bossSlayer.current = game.bossesDefeated;
+
+            for (let key in game.achievements) {
+                let ach = game.achievements[key];
+                if (!ach.unlocked && ach.current >= ach.target) {
+                    ach.unlocked = true;
+                    game.credits += ach.reward;
+                    addLog(`🏆 CONQUISTA DESBLOQUEADA: ${ach.name}! +$${ach.reward} Créditos.`, "success");
+                    updateNews(`CONQUISTA: Netrunner desbloqueou o troféu "${ach.name}"!`);
+                    renderAchievements();
+                }
+            }
+        }
+
+        function renderAchievements() {
+            const list = document.getElementById('achievements-list');
+            list.innerHTML = "";
+            for (let key in game.achievements) {
+                let ach = game.achievements[key];
+                list.innerHTML += `
+                    <div class="upgrade-item" style="border-color: ${ach.unlocked ? 'var(--accent-color)' : 'var(--border-color)'}">
+                        <div class="upgrade-title">${ach.name}${ach.unlocked ? '<i class="fa-solid fa-check" style="color: var(--accent-color);"></i>' : ''}</div>
+                        <div class="upgrade-desc">${ach.desc}</div>                         <div class="upgrade-cost">Recompensa: +$${ach.reward} (${ach.current}/${ach.target})</div>
+                    </div>
+                `;
+            }
+        }
+
+        // SALVAMENTO AUTOMÁTICO E LOCALSTORAGE / EXPORTAR
+        function saveGame() {
+            localStorage.setItem('omni_netrunner_save', JSON.stringify(game));
+            addLog("[AUTOSAVE] Estado quântico salvo no armazenamento local.", "info");
+        }
+
+        function loadGame() {
+            let saved = localStorage.getItem('omni_netrunner_save');
+            if (saved) {
+                try {
+                    let parsed = JSON.parse(saved);
+                    game = Object.assign({}, game, parsed);
+                    addLog("[CARREGAMENTO] Dados do Netrunner restaurados com sucesso.", "success");
+                } catch(e) {
+                    addLog("[ERRO] Falha ao carregar save local.", "error");
+                }
+            }
+        }
+
+        function openSaveManager() {
+            let saveString = btoa(JSON.stringify(game));
+            document.getElementById('save-textarea').value = saveString;
+            toggleModal('save-modal', true);
+        }
+
+        function importSaveData() {
+            let code = document.getElementById('save-textarea').value.trim();
+            try {
+                let decoded = JSON.parse(atob(code));
+                game = Object.assign({}, game, decoded);
+                saveGame();
+                updateUI();
+                toggleModal('save-modal', false);
+                addLog("Save importado com sucesso!", "success");
+            } catch(e) {
+                alert("Código de save inválido!");
             }
         }
 
@@ -609,9 +878,11 @@ function bypassOracleNeuralNet() {
                         bossActive = false;
                         game.credits += 300;
                         game.xp += 150;
+                        game.bossesDefeated++;
                         addLog("Chefe AI-Vanguard derrotado! +300 Créditos e +150 XP.", "success");
                         document.getElementById('boss-arena').style.display = 'none';
                         document.getElementById('start-boss-btn').style.display = 'block';
+                        checkAchievements();
                         updateUI();
                         updateNews("VITÓRIA: O firewall de elite do Diretor AI-Vanguard foi pulverizado.");
                     } else {
@@ -636,15 +907,21 @@ function bypassOracleNeuralNet() {
                 if (cmd === "help") {
                     addLog("Comandos disponíveis: help, ls, cat [arquivo], hack, status, clear", "success");
                 } else if (cmd === "ls") {
-                    addLog("Arquivos no diretório: oracle_core.conf, firewall_rules.py, segredos_omni.txt", "success");
-                } else if (cmd === "cat segredos_omni.txt") {
-                    addLog("[CONFIDENCIAL] A IA Oracle foi construída usando mentes humanas digitalizadas em 2072.", "warn");
+                    addLog("Arquivos no diretório: main.js, firewall.json, database.sql", "success");
+                } else if (cmd.startsWith("cat ")) {
+                    let filename = cmd.replace("cat ", "").trim();
+                    if (fileContents[filename]) {
+                        switchOpenFile(filename);
+                        addLog(`Visualizando conteúdo de /${filename}`, "success");
+                    } else {
+                        addLog(`Arquivo não encontrado: ${filename}`, "error");
+                    }
                 } else if (cmd === "hack") {
                     game.credits += 50;
                     addLog("Invasão de sub-servidor bem-sucedida! +50 Créditos.", "success");
                     updateUI();
                 } else if (cmd === "status") {
-                    addLog(`Nível: ${game.level} | LOC: ${Math.floor(game.loc)} | Créditos: $${game.credits}`, "info");
+                    addLog(`Nível: ${game.level} | LOC: ${Math.floor(game.loc)} \vert{} Créditos: $${game.credits}`, "info");
                 } else if (cmd === "clear") {
                     document.getElementById('terminal-logs').innerHTML = "[SYS_INIT] Terminal limpo.";
                 } else {
@@ -652,6 +929,59 @@ function bypassOracleNeuralNet() {
                 }
             }
         }
+
+        // ATALHOS GLOBAIS (POWER USER MODE)
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'F5') {
+                e.preventDefault();
+                writeCodeManual();
+            }
+            if (e.ctrlKey && e.key.toLowerCase() === 'b') {
+                e.preventDefault();
+                let sb = document.getElementById('sidebar-panel');
+                sb.style.display = (sb.style.display === 'none') ? 'flex' : 'none';
+                addLog(sb.style.display === 'none' ? "Barra lateral ocultada." : "Barra lateral exibida.", "info");
+            }
+            if (e.ctrlKey && (e.key === '`' || e.key === '~')) {
+                e.preventDefault();
+                document.getElementById('cli-input').focus();
+                addLog("Foco transferido para o Terminal CLI.", "info");
+            }
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                validateChallengeCode();
+            }
+        });
+
+        // CANVAS MATRIX CODE RAIN
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*<>[]{}//\\-+*";
+        const fontSize = 12;
+        let columns = canvas.width / fontSize;
+        let drops = [];
+        for (let x = 0; x < columns; x++) drops[x] = 1;
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(30, 30, 30, 0.08)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff66';
+            ctx.font = fontSize + 'px Fira Code';
+            for (let i = 0; i < drops.length; i++) {
+                let text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
 
         function updateUI() {
             document.getElementById('loc-count').innerText = Math.floor(game.loc);
@@ -673,8 +1003,10 @@ function bypassOracleNeuralNet() {
             renderExtensions();
             renderDaemons();
             renderTechTree();
+            renderAchievements();
         }
 
+        // Loops principais
         setInterval(() => {
             if (game.cps > 0) {
                 game.loc += game.cps / 10;
@@ -685,16 +1017,24 @@ function bypassOracleNeuralNet() {
             if (game.heat > 0 && !game.throttled) {
                 game.heat = Math.max(0, game.heat - 2);
                 document.getElementById('heat-count').innerText = game.heat + "%";
+                if (game.heat < 80) {
+                    document.getElementById('editor-container-main').classList.remove('glitch-active');
+                }
             }
         }, 100);
 
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'F5') {
-                e.preventDefault();
-                writeCodeManual();
-            }
-        });
+        // Autosave a cada 10 segundos
+        setInterval(() => {
+            saveGame();
+        }, 10000);
 
+        // Eventos aleatórios a cada 45 segundos
+        setInterval(() => {
+            triggerRandomEvent();
+        }, 45000);
+
+        // Inicialização
+        loadGame();
         updateUI();
     </script>
 </body>
